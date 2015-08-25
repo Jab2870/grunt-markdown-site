@@ -1,6 +1,6 @@
-# grunt-markdown-site
+# grunt-site
 
-The easiest way to create a website with markdown
+The easiest way to create a website with grunt
 
 ## Roadmap
 
@@ -12,13 +12,14 @@ The easiest way to create a website with markdown
     * Options
       * A template directory
       * A default template
+      * A site configuration object
 
 * Parse
-  * src/**/*.md
+  * markdown and html files
     * passing each *.md to it's configured template (in YAML or options.defaultTemplate)
-    * passing each *.md template access to it's coorisponding *.md YAML, HTML content, and that of all other documents 
+    * passing each *.md template access to it's coorisponding YAML, HTML content, and that of all other documents 
 * Generate
   * dest/**/*.html
   * using lodash templates
 * Copy
-  * All non-markdown src/**/* files to dest/**/*
+  * All non-markdown && non-html src/**/* files to dest/**/*

@@ -1,14 +1,14 @@
 {
-  "name": "grunt-markdown-site",
+  "name": "grunt-site",
   "version": "0.0.1",
-  "description": "The easiest way to create a website with markdown",
+  "description": "The easiest way to create a website with grunt",
   "main": "tasks/site.js",
   "directories": {
     "example": "example"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/juliandoucetteio/grunt-markdown-site.git"
+    "url": "https://github.com/juliandoucetteio/grunt-site.git"
   },
   "keywords": [
     "grunt",
@@ -23,9 +23,9 @@
   "author": "Julian Doucette <dev@juliandoucette.io> (http://juliandoucette.io)",
   "license": "LGPLv3",
   "bugs": {
-    "url": "https://github.com/juliandoucetteio/grunt-markdown-site/issues"
+    "url": "https://github.com/juliandoucetteio/grunt-site/issues"
   },
-  "homepage": "https://github.com/juliandoucetteio/grunt-markdown-site",
+  "homepage": "https://github.com/juliandoucetteio/grunt-site",
   "devDependencies": {
     "grunt": "^0.4.5"
   },
