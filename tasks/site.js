@@ -41,8 +41,30 @@ module.exports = function (grunt) {
       grunt.fail.fatal(ERROR.INVALID_FILES);
     }
     
-    console.log('success!');
-  
+    //sugar
+    var defaultTemplate = options.defaultTemplate;
+    var templateDirectory = options.templates;
+    var contentDirectory = this.files[0].src[0];
+    var destinationDirectory = this.files[0].dest;
+    
+    var contentPaths = grunt.file.expand({
+      cwd: contentDirectory, 
+      filter: 'isFile'
+    }, '**/*.md');
+    
+    var assetPaths = grunt.file.expand({
+      cwd: contentDirectory, 
+      filter: 'isFile'
+    }, '**/*', '!**/*.md');
+    
+    var templatePaths = grunt.file.expand({
+      cwd: templateDirectory,
+      filter: 'isFile'
+    }, '**/*.html');
+    
+    
+    
+
   };
   
   grunt.registerMultiTask(name, desc, task);
