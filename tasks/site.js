@@ -113,7 +113,9 @@ module.exports = function (grunt) {
     var documents = {};
     
     markdownDocuments.forEach(function (markdownDocument, index) {
-      documents[markdownPaths[index]] = _.extend(markdownDocument, {
+      var meta = markdownDocument.meta;
+      delete markdownDocument.meta
+      documents[markdownPaths[index]] = _.extend(meta, markdownDocument, {
         site: options.site,
         documents: documents,
         partial: partial
