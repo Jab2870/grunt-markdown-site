@@ -1,5 +1,6 @@
 
-var _ = require('lodash')
+var _ = require('lodash');
+var path = require('path');
 
 module.exports = function (grunt) {
   
@@ -10,7 +11,7 @@ module.exports = function (grunt) {
   var ERROR = {
     INVALID_TEMPLATE_DIR: 'site task must have a valid templates directory',
     INVALID_DEFAULT_TEMPLATE: 'site task must have a valid default template',
-    INVALID_FILES: 'site task must be provided one valid src directory and one valid dest directory',
+    INVALID_FILES: 'site task must be provided one valid src directory and one valid dest directory'
   };
   
   var task = function () {
@@ -79,6 +80,20 @@ module.exports = function (grunt) {
     }, '*.html');
     
     //= templates ============================================================//
+    
+    var templates = {};
+    
+    _.each(templatePaths, function (templatePath) {
+      try {
+        templates[templatePath] = _.template(
+          grunt.file.read(
+            path.join(templateDirectory, templatePath)  
+          )
+        );
+      } catch (err) {
+        grunt.fail.fatal(err + ' in ' + templatePath);
+      }
+    });
     
     //= datastructure ========================================================//
     
