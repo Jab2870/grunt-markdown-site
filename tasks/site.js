@@ -1,5 +1,6 @@
 
 var _ = require('lodash');
+var mm = require('marky-mark');
 var path = require('path');
 
 module.exports = function (grunt) {
@@ -95,7 +96,29 @@ module.exports = function (grunt) {
       }
     });
     
+    var scope;
+    
+    var partial = function (src) {
+      try {
+        return templates[src](scope);
+      } catch (err) {
+        grunt.fail.fatal(err + ' in ' + src);
+      }
+    };
+    
     //= datastructure ========================================================//
+    
+    var markdownDocuments = mm.parseFilesSync(markdownPaths);
+    
+    var documents = {};
+    
+    markdownDocuments.forEach(function (markdownDocument, index) {
+      documents[markdownPaths[index]] = _.extend(markdownDocument, {
+        site: options.site,
+        documents: documents,
+        partial: partial
+      });
+    });
     
     //= output ===============================================================//
     

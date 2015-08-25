@@ -30,6 +30,7 @@
     "grunt": "^0.4.5"
   },
   "dependencies": {
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "marky-mark": "^1.2.1"
   }
 }
