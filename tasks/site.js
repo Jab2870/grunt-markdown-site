@@ -15,11 +15,15 @@ module.exports = function (grunt) {
   
   var task = function () {
     
-    //get options
+    //= options ==============================================================//
+    
     var options = this.options({
-      templates: '.',
+      site: {},
+      templates: 'templates',
       defaultTemplate: 'default.html'
     });
+    
+    //= validation ===========================================================//
     
     //require a valid templates directory
     if (false === grunt.file.isDir(options.templates)) {
@@ -41,30 +45,45 @@ module.exports = function (grunt) {
       grunt.fail.fatal(ERROR.INVALID_FILES);
     }
     
-    //sugar
+    //= sugar ================================================================//
+    
     var defaultTemplate = options.defaultTemplate;
     var templateDirectory = options.templates;
     var contentDirectory = this.files[0].src[0];
     var destinationDirectory = this.files[0].dest;
     
-    var contentPaths = grunt.file.expand({
-      cwd: contentDirectory, 
-      filter: 'isFile'
-    }, '**/*.md');
+    //= content ==============================================================//
+    
+    var markdownPaths = grunt.file.expand({
+      cwd: contentDirectory,
+      filter: 'isFile',
+      matchBase: true
+    }, '*.md');
+    
+    var htmlPaths = grunt.file.expand({
+      cwd: contentDirectory,
+      filter: 'isFile',
+      matchBase: true
+    }, '*.html');
     
     var assetPaths = grunt.file.expand({
-      cwd: contentDirectory, 
-      filter: 'isFile'
-    }, '**/*', '!**/*.md');
+      cwd: contentDirectory,
+      filter: 'isFile',
+      matchBase: true
+    }, '*', '!*.html', '!*.md');
     
     var templatePaths = grunt.file.expand({
       cwd: templateDirectory,
-      filter: 'isFile'
-    }, '**/*.html');
+      filter: 'isFile',
+      matchBase: true
+    }, '*.html');
     
+    //= templates ============================================================//
     
+    //= datastructure ========================================================//
     
-
+    //= output ===============================================================//
+    
   };
   
   grunt.registerMultiTask(name, desc, task);

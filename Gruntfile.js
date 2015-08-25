@@ -4,6 +4,9 @@ module.exports = function(grunt) {
     site: {
       example: {
         options: {
+          site: {
+            url: 'http://localhost:8000'
+          },
           templates: 'example/templates',
           defaultTemplate: 'post.html',
         },
