@@ -1,0 +1,12 @@
+<%= partial('header.html') %>
+<nav>
+  <%= content %>
+  <ul>
+    <% _.each(documents, function (document) { %>
+      <% if (document.category === 'example') { %>
+        <li><a href="<%= document.dest %>"><%= document.title %></a></li>
+      <% } %>
+    <% }); %>
+  </ul>
+</nav>
+<%= partial('footer.html') %>
