@@ -28,5 +28,8 @@
   "homepage": "https://github.com/juliandoucetteio/grunt-markdown-site",
   "devDependencies": {
     "grunt": "^0.4.5"
+  },
+  "dependencies": {
+    "lodash": "^3.10.1"
   }
 }

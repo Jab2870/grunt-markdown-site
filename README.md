@@ -19,6 +19,6 @@ The easiest way to create a website with markdown
     * passing each *.md template access to it's coorisponding *.md YAML, HTML content, and that of all other documents 
 * Generate
   * dest/**/*.html
-  * using underscore templates
+  * using lodash templates
 * Copy
   * All non-markdown src/**/* files to dest/**/*
