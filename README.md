@@ -8,30 +8,29 @@ The easiest way to create a website with grunt
 ### Create a website with markdown using HTML templates
 
 <table>
+<thead>
+<tr>
+  <th style="text-align:left;vertical-align:top;">template.html</th>
+  <th style="text-align:left;vertical-align:top;">post.md</th>
+  <th style="text-align:left;vertical-align:top;">post.html</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-  <td style="text-align:left;vertical-align:top;"><pre>
-<strong>template.html</strong>
-
+  <td style="text-align:left;vertical-align:top;"><pre><code>
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;%= content %&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
-  </pre></td>
-  <td style="text-align:left;vertical-align:top;"><pre>
-<strong>post.md</strong>
-
+  </code></pre></td>
+  <td style="text-align:left;vertical-align:top;"><pre><code>
 ---
 title: Post title
 template: template.html
 ---
-
 # Post heading
-
 Post content
-</pre></td>
-  <td style="text-align:left;vertical-align:top;"><pre>
-<strong>post.html</strong>
-
+</code></pre></td>
+  <td style="text-align:left;vertical-align:top;"><pre><code>
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;Post title&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;h1&gt;Post heading&lt;/h1&gt;<br/>    &lt;p&gt;Post content&lt;/p&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
-  </pre></td>
+  </code></pre></td>
 </tr>
 </tbody>
 </table>
@@ -39,27 +38,30 @@ Post content
 ### Create a website with HTML using HTML templates
 
 <table>
+<thead>
+<tr>
+  <td style="text-align:left;vertical-align:top;">page.html</td>
+  <td style="text-align:left;vertical-align:top;">partials</td>
+  <td style="text-align:left;vertical-align:top;">page.html</td>
+</tr>
+</thead>
 <tbody>
 <tr>
-  <td style="text-align:left;vertical-align:top;"><pre>
-<strong>page.html</strong>
-
-&lt;% partial('header.html') %&gt;<br/>&lt;main&gt;<br/>  &lt;h1&gt;Page heading&lt;/h1&gt;<br/>  &lt;p&gt;Page content&lt;/p&gt;<br/>&lt;/main&gt;<br/>&lt;% partial('footer.html') %&gt;  </pre></td>
-
-  <td style="text-align:left;vertical-align:top;"><pre>
-<strong>header.html</strong>
+  <td style="text-align:left;vertical-align:top;"><pre><code>
+&lt;% partial('header.html') %&gt;<br/>&lt;main&gt;<br/>  &lt;h1&gt;Page heading&lt;/h1&gt;<br/>  &lt;p&gt;Page content&lt;/p&gt;<br/>&lt;/main&gt;<br/>&lt;% partial('footer.html') %&gt;  
+  </code></pre></td>
+  <td style="text-align:left;vertical-align:top;"><pre><code>
+header.html
 
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;
 
-<strong>footer.html</strong> 
+footer.html
 
   &lt;/body&gt;<br/>&lt;/html&gt;
-</pre></td>
-  <td style="text-align:left;vertical-align:top;"><pre>
-<strong>page.html</strong>
-
+ </code></pre></td>
+  <td style="text-align:left;vertical-align:top;"><pre><code>
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;Page title&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;h1&gt;Post heading&lt;/h1&gt;<br/>    &lt;p&gt;Post content&lt;/p&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
-  </pre></td>
+  </code></pre></td>
 </tr>
 </tbody>
 </table>
@@ -83,11 +85,15 @@ grunt.loadNpmTasks('grunt-site');
 ## Basic project setup
 
 <table>
+<thead>
+<tr>
+  <th style="text-align:left;vertical-align:top;">Gruntfile.js</th>
+  <th style="text-align:left;vertical-align:top;">Directory structure</th>
+</tr>
+</thead>
 <tbody>
   <tr>
-    <td style="text-align:left;vertical-align:top;"><pre>
-<strong>Gruntfile.js</strong>
-
+    <td style="text-align:left;vertical-align:top;"><pre><code>
 module.exports = function(grunt) {
   grunt.initConfig({
     site: {
@@ -104,10 +110,8 @@ module.exports = function(grunt) {
   });
   grunt.loadNpmTasks('grunt-site');
 };
-    </pre></td>
-    <td style="text-align:left;vertical-align:top;"><pre>
-<strong>Directory structure</strong>
-    
+    </code></pre></td>
+    <td style="text-align:left;vertical-align:top;"><pre><code>
 - site _//site name_
   - content _//content directory_
     - index.md _//index page_
@@ -122,7 +126,7 @@ module.exports = function(grunt) {
       - image1.jpg
   - templates _//template directory_
     - default.html
-    </pre></td>
+    </code></pre></td>
   </tr>
 </tbody>
 </table>
