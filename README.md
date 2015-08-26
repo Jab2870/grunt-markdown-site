@@ -2,7 +2,13 @@
 
 The easiest way to create a website with grunt
 
-## Roadmap
+## Changelog
+
+### 0.2.0
+
+* Change task options to accept a base site directory, required content and templates, and optional assets
+* Change error messages to be site task specific by adding 'site: ' before them
+* Add optionally provided assets to asset collection and copy them in the coorispinding destination
 
 ### 0.1.0
 

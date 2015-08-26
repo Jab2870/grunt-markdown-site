@@ -11,9 +11,11 @@ module.exports = function (grunt) {
   var desc = 'The easiest way to create a website with grunt';
   
   var ERROR = {
-    INVALID_TEMPLATE_DIR: 'site task must have a valid templates directory',
-    INVALID_DEFAULT_TEMPLATE: 'site task must have a valid default template',
-    INVALID_FILES: 'site task must be provided one valid src directory and one valid dest directory'
+    INVALID_FILES: 'site: invalid src or dest directory',
+    INVALID_CONTENT_DIR: 'site: invalid content directory',
+    INVALID_TEMPLATE_DIR: 'site: invalid templates directory',
+    INVALID_ASSETS_DIR: 'site: invalid assets directory',
+    INVALID_DEFAULT_TEMPLATE: 'site: invalid default template',
   };
   
   var task = function () {
@@ -22,21 +24,13 @@ module.exports = function (grunt) {
     
     var options = this.options({
       site: {},
+      content: 'content',
+      assets: 'assets',
       templates: 'templates',
       defaultTemplate: 'default.html'
     });
     
     //= validation ===========================================================//
-    
-    //require a valid templates directory
-    if (false === grunt.file.isDir(options.templates)) {
-      grunt.fail.fatal(ERROR.INVALID_TEMPLATE_DIR);
-    }
-    
-    //require a valid default template
-    if (false === grunt.file.isFile(options.templates, options.defaultTemplate)) {
-      grunt.fail.fatal(ERROR.INVALID_DEFAULT_TEMPLATE);  
-    }
     
     //require one valid src and one valid dest dir as a string
     if (
@@ -48,12 +42,33 @@ module.exports = function (grunt) {
       grunt.fail.fatal(ERROR.INVALID_FILES);
     }
     
-    //= sugar ================================================================//
+    var baseDirectory = this.files[0].src[0];
+    var destDirectory = this.files[0].dest;
     
-    var defaultTemplate = options.defaultTemplate;
-    var templateDirectory = options.templates;
-    var contentDirectory = this.files[0].src[0];
-    var destinationDirectory = this.files[0].dest;
+    //require valid content directory
+    if (false === grunt.fil.isDir(path.join(baseDirectory, options.content))) {
+      grunt.fail.fatal(ERROR.INVALID_CONTENT_DIR);
+    }
+    
+    var contentDirectory = path.join(baseDirectory, options.content);
+    
+    //require valid templates directory
+    if (false === grunt.file.isDir(path.join(baseDirectory, options.templates))) {
+      grunt.fail.fatal(ERROR.INVALID_TEMPLATE_DIR);
+    }
+    
+    var templateDirectory = path.join(baseDirectory, options.templates);
+    
+    //optionally require valid assets directory
+    if (options.assets && grunt.file.isDir(path.join(baseDirectory, options.assets))) {
+      grunt.fail.fatal(ERROR.INVALID_ASSETS_DIR);
+    }
+    
+    //require a valid default template
+    if (false === grunt.file.isFile(templateDirectory, options.defaultTemplate)) {
+      grunt.fail.fatal(ERROR.INVALID_DEFAULT_TEMPLATE);  
+    }
+    
     var documents = [];
     
     //= content ==============================================================//

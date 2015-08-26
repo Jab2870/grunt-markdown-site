@@ -6,12 +6,10 @@ module.exports = function(grunt) {
         options: {
           site: {
             url: 'http://localhost:8000',
-            title: 'Example site'
-          },
-          templates: 'example/templates',
-          defaultTemplate: 'post.html',
+            title: 'Example'
+          }
         },
-        src: 'example/content',
+        src: 'site',
         dest: 'dest'
       }
     },
