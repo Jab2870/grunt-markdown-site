@@ -93,7 +93,7 @@ grunt.loadNpmTasks('grunt-site');
     site: {
       example: {
         options: {
-          site: { _//globals_
+          site: { //globals
             url: 'http://localhost:8000',
           }
         },
@@ -105,19 +105,19 @@ grunt.loadNpmTasks('grunt-site');
   grunt.loadNpmTasks('grunt-site');
 };
     </code></pre></td>
-    <td style="text-align:left;vertical-align:top;"><pre><code>- site _//site name_
-  - content _//content directory_
-    - index.md _//index page_
-    - category _//category name_
-      - post-name _//post name_
-        - index.md _//post_
-        - Image.jpg _//post asset_
-      - index.md _//archive_
-    - page.html _//html page_
-  - assets _//assets directory_
+    <td style="text-align:left;vertical-align:top;"><pre><code>- site //site name
+  - content //content directory
+    - index.md //index page
+    - category //category name
+      - post-name //post name
+        - index.md //post
+        - Image.jpg //post asset
+      - index.md //archive
+    - page.html //html page
+  - assets //assets directory
     - images
       - image1.jpg
-  - templates _//template directory_
+  - templates //template directory
     - default.html
     </code></pre></td>
   </tr>
