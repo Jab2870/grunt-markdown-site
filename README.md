@@ -17,17 +17,9 @@ The easiest way to create a website with grunt
 </thead>
 <tbody>
 <tr>
-  <td style="text-align:left;vertical-align:top;"><pre><code>
-<DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-  </head>
-  <body>
-    <%= content %>
-  </body>
-</html>
-  </code></pre></td>
+  <td style="text-align:left;vertical-align:top;"><pre>
+&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;%= content %&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
+  </pre></td>
   <td style="text-align:left;vertical-align:top;"><pre><code>
 ---
 title: Post title
@@ -36,9 +28,9 @@ template: template.html
 # Post heading
 Post content
 </code></pre></td>
-  <td style="text-align:left;vertical-align:top;"><pre><code>
+  <td style="text-align:left;vertical-align:top;"><pre>
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;Post title&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;h1&gt;Post heading&lt;/h1&gt;<br/>    &lt;p&gt;Post content&lt;/p&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
-  </code></pre></td>
+  </pre></td>
 </tr>
 </tbody>
 </table>
@@ -55,10 +47,10 @@ Post content
 </thead>
 <tbody>
 <tr>
-  <td style="text-align:left;vertical-align:top;"><pre><code>
+  <td style="text-align:left;vertical-align:top;"><pre>
 &lt;% partial('header.html') %&gt;<br/>&lt;main&gt;<br/>  &lt;h1&gt;Page heading&lt;/h1&gt;<br/>  &lt;p&gt;Page content&lt;/p&gt;<br/>&lt;/main&gt;<br/>&lt;% partial('footer.html') %&gt;  
-  </code></pre></td>
-  <td style="text-align:left;vertical-align:top;"><pre><code>
+  </pre></td>
+  <td style="text-align:left;vertical-align:top;"><pre>
 header.html
 
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;
@@ -66,10 +58,10 @@ header.html
 footer.html
 
   &lt;/body&gt;<br/>&lt;/html&gt;
- </code></pre></td>
-  <td style="text-align:left;vertical-align:top;"><pre><code>
+ </pre></td>
+  <td style="text-align:left;vertical-align:top;"><pre>
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;Page title&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;h1&gt;Post heading&lt;/h1&gt;<br/>    &lt;p&gt;Post content&lt;/p&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
-  </code></pre></td>
+  </pre></td>
 </tr>
 </tbody>
 </table>
