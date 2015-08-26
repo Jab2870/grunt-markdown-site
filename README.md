@@ -10,12 +10,12 @@ The easiest way to create a website with grunt
 <table>
 <tbody>
 <tr>
-  <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+  <td style="text-align:left;vertical-align:top;"><pre>
 <strong>template.html</strong>
 
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;%= content %&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
   </pre></td>
-  <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+  <td style="text-align:left;vertical-align:top;"><pre>
 <strong>post.md</strong>
 
 ---
@@ -27,7 +27,7 @@ template: template.html
 
 Post content
 </pre></td>
-  <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+  <td style="text-align:left;vertical-align:top;"><pre>
 <strong>post.html</strong>
 
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;Post title&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;h1&gt;Post heading&lt;/h1&gt;<br/>    &lt;p&gt;Post content&lt;/p&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
@@ -41,12 +41,12 @@ Post content
 <table>
 <tbody>
 <tr>
-  <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+  <td style="text-align:left;vertical-align:top;"><pre>
 <strong>page.html</strong>
 
 &lt;% partial('header.html') %&gt;<br/>&lt;main&gt;<br/>  &lt;h1&gt;Page heading&lt;/h1&gt;<br/>  &lt;p&gt;Page content&lt;/p&gt;<br/>&lt;/main&gt;<br/>&lt;% partial('footer.html') %&gt;  </pre></td>
 
-  <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+  <td style="text-align:left;vertical-align:top;"><pre>
 <strong>header.html</strong>
 
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;
@@ -55,7 +55,7 @@ Post content
 
   &lt;/body&gt;<br/>&lt;/html&gt;
 </pre></td>
-  <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+  <td style="text-align:left;vertical-align:top;"><pre>
 <strong>page.html</strong>
 
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;Page title&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;h1&gt;Post heading&lt;/h1&gt;<br/>    &lt;p&gt;Post content&lt;/p&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
@@ -85,7 +85,7 @@ grunt.loadNpmTasks('grunt-site');
 <table>
 <tbody>
   <tr>
-    <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+    <td style="text-align:left;vertical-align:top;"><pre>
 <strong>Gruntfile.js</strong>
 
 module.exports = function(grunt) {
@@ -105,7 +105,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-site');
 };
     </pre></td>
-    <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+    <td style="text-align:left;vertical-align:top;"><pre>
 <strong>Directory structure</strong>
     
 - site _//site name_
