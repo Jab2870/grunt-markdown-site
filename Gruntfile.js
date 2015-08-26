@@ -21,10 +21,18 @@ module.exports = function(grunt) {
           keepalive: true
         }
       }
+    },
+    jshint: {
+      task: {
+        options: {},
+        src: ['tasks/site.js']
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  
   grunt.loadTasks('tasks');
 
   grunt.registerTask('default', ['site']);

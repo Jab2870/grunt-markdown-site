@@ -117,7 +117,7 @@ module.exports = function (grunt) {
           grunt.file.read(
             path.join(templateDirectory, templatePath)  
           )  
-        )
+        );
       } catch (err) {
         grunt.fail.fatal(err + ' in ' + templatePath);
       }
@@ -167,7 +167,7 @@ module.exports = function (grunt) {
     //extend documents with markdown
     _.each(markdown, function (doc, index) {
       var meta = doc.meta;
-      delete doc.meta
+      delete doc.meta;
       documents.push(_.extend(meta, scope, doc, {
         template: typeof meta.template === 'string' ? meta.template : defaultTemplate,
         src: markdownPaths[index],
@@ -216,4 +216,4 @@ module.exports = function (grunt) {
   
   grunt.registerMultiTask(name, desc, task);
   
-}
+};
