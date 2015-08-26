@@ -8,7 +8,7 @@ module.exports = function (grunt) {
   
   var name = 'site';
   
-  var desc = 'The easiest way to create a website with markdown';
+  var desc = 'The easiest way to create a website with grunt';
   
   var ERROR = {
     INVALID_TEMPLATE_DIR: 'site task must have a valid templates directory',
