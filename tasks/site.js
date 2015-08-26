@@ -2,6 +2,7 @@
 var _ = require('lodash');
 var mm = require('marky-mark');
 var path = require('path');
+var moment = require('moment');
 
 module.exports = function (grunt) {
   
@@ -41,7 +42,7 @@ module.exports = function (grunt) {
     if (
       this.files.length !== 1 || //one files entry
       this.files[0].src.length !== 1 || //with one src
-      false === _.isString(this.files[0].dest) || //and one dest
+      typeof this.files[0].dest !== 'string' || //and one dest
       false === grunt.file.isDir(this.files[0].src[0]) //the src must be a directory
     ) {
       grunt.fail.fatal(ERROR.INVALID_FILES);
@@ -53,6 +54,7 @@ module.exports = function (grunt) {
     var templateDirectory = options.templates;
     var contentDirectory = this.files[0].src[0];
     var destinationDirectory = this.files[0].dest;
+    var documents = [];
     
     //= content ==============================================================//
     
@@ -84,19 +86,33 @@ module.exports = function (grunt) {
     
     var templates = {};
     
+    //cache templates
     _.each(templatePaths, function (templatePath) {
       try {
         templates[templatePath] = _.template(
           grunt.file.read(
             path.join(templateDirectory, templatePath)  
-          )
-        );
+          )  
+        )
       } catch (err) {
         grunt.fail.fatal(err + ' in ' + templatePath);
       }
     });
     
-    var scope;
+    //cache html as templates (fully qualified to avoid name conflicts)
+    _.each(htmlPaths, function (htmlPath) {
+      try {
+        templates[path.join(contentDirectory, htmlPath)] = _.template(
+          grunt.file.read(
+            path.join(contentDirectory, htmlPath)  
+          )  
+        );
+      } catch (err) {
+        grunt.fail.fatal(err + ' in ' + htmlPath);
+      }
+    });
+    
+    //= partials =============================================================//
     
     var partial = function (src) {
       try {
@@ -106,23 +122,63 @@ module.exports = function (grunt) {
       }
     };
     
+    var scope = {
+      _: _,
+      path: path,
+      moment: moment,
+      site: options.site,
+      documents: documents,
+      partial: partial
+    };
+    
     //= datastructure ========================================================//
     
-    var markdownDocuments = mm.parseFilesSync(markdownPaths);
+    var markdown = mm.parseFilesSync(
+      //because markdownPaths are relative to the contentDirectory
+      markdownPaths.map(function (relativePath) {
+        return path.join(contentDirectory, relativePath);
+      })
+    );
     
-    var documents = {};
-    
-    markdownDocuments.forEach(function (markdownDocument, index) {
-      var meta = markdownDocument.meta;
-      delete markdownDocument.meta
-      documents[markdownPaths[index]] = _.extend(meta, markdownDocument, {
-        site: options.site,
-        documents: documents,
-        partial: partial
-      });
+    //extend documents with markdown
+    _.each(markdown, function (doc, index) {
+      var meta = doc.meta;
+      delete doc.meta
+      documents.push(_.extend(meta, scope, doc, {
+        template: typeof meta.template === 'string' ? meta.template : defaultTemplate,
+        src: markdownPaths[index],
+        dest: markdownPaths[index].replace('.md', '.html'),
+      }));
+    });
+
+    //extend documents with html
+    _.each(htmlPaths, function (htmlPath, index) {
+      documents.push(_.extend({
+        //fully qualified template path to avoid name conflicts
+        template: path.join(contentDirectory, htmlPath),
+        src: htmlPath,
+        dest: htmlPath
+      }, scope));
     });
     
     //= output ===============================================================//
+    
+    //output documents
+    _.each(documents, function (doc) {
+      scope = doc;
+      grunt.file.write(
+        path.join(destinationDirectory, doc.dest), 
+        partial(doc.template)
+      );
+    });
+    
+    //copy assets
+    _.each(assetPaths, function (asset) {
+      grunt.file.copy(
+        path.join(contentDirectory, asset),
+        path.join(destinationDirectory, asset)
+      );
+    });
     
   };
   
