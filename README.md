@@ -20,8 +20,7 @@ The easiest way to create a website with grunt
   <td style="text-align:left;vertical-align:top;"><pre>
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;%= content %&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
   </pre></td>
-  <td style="text-align:left;vertical-align:top;"><pre><code>
----
+  <td style="text-align:left;vertical-align:top;"><pre><code>---
 title: Post title
 template: template.html
 ---
@@ -40,9 +39,9 @@ Post content
 <table>
 <thead>
 <tr>
-  <td style="text-align:left;vertical-align:top;">page.html</td>
-  <td style="text-align:left;vertical-align:top;">partials</td>
-  <td style="text-align:left;vertical-align:top;">page.html</td>
+  <th style="text-align:left;vertical-align:top;">page.html</th>
+  <th style="text-align:left;vertical-align:top;">partials</th>
+  <th style="text-align:left;vertical-align:top;">page.html</th>
 </tr>
 </thead>
 <tbody>
@@ -51,12 +50,8 @@ Post content
 &lt;% partial('header.html') %&gt;<br/>&lt;main&gt;<br/>  &lt;h1&gt;Page heading&lt;/h1&gt;<br/>  &lt;p&gt;Page content&lt;/p&gt;<br/>&lt;/main&gt;<br/>&lt;% partial('footer.html') %&gt;  
   </pre></td>
   <td style="text-align:left;vertical-align:top;"><pre>
-header.html
-
-&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;
-
-footer.html
-
+header.html<br/>
+&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;footer.html
   &lt;/body&gt;<br/>&lt;/html&gt;
  </pre></td>
   <td style="text-align:left;vertical-align:top;"><pre>
@@ -93,8 +88,7 @@ grunt.loadNpmTasks('grunt-site');
 </thead>
 <tbody>
   <tr>
-    <td style="text-align:left;vertical-align:top;"><pre><code>
-module.exports = function(grunt) {
+    <td style="text-align:left;vertical-align:top;"><pre><code>module.exports = function(grunt) {
   grunt.initConfig({
     site: {
       example: {
@@ -111,8 +105,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-site');
 };
     </code></pre></td>
-    <td style="text-align:left;vertical-align:top;"><pre><code>
-- site _//site name_
+    <td style="text-align:left;vertical-align:top;"><pre><code>- site _//site name_
   - content _//content directory_
     - index.md _//index page_
     - category _//category name_
