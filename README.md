@@ -18,7 +18,15 @@ The easiest way to create a website with grunt
 <tbody>
 <tr>
   <td style="text-align:left;vertical-align:top;"><pre><code>
-&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;%= content %&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
+<DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+  </head>
+  <body>
+    <%= content %>
+  </body>
+</html>
   </code></pre></td>
   <td style="text-align:left;vertical-align:top;"><pre><code>
 ---
