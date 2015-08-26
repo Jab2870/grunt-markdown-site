@@ -17,14 +17,16 @@ module.exports = function(grunt) {
       example: {
         options: {
           port: 8000,
-          base: 'dest'
+          base: 'dest',
+          keepalive: true
         }
       }
     }
   });
 
+  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadTasks('tasks');
 
-  grunt.registerTask('default', ['site', 'connect']);
+  grunt.registerTask('default', ['site']);
 
 };

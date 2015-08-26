@@ -46,7 +46,7 @@ module.exports = function (grunt) {
     var destDirectory = this.files[0].dest;
     
     //require valid content directory
-    if (false === grunt.fil.isDir(path.join(baseDirectory, options.content))) {
+    if (false === grunt.file.isDir(path.join(baseDirectory, options.content))) {
       grunt.fail.fatal(ERROR.INVALID_CONTENT_DIR);
     }
     
@@ -60,18 +60,22 @@ module.exports = function (grunt) {
     var templateDirectory = path.join(baseDirectory, options.templates);
     
     //optionally require valid assets directory
-    if (options.assets && grunt.file.isDir(path.join(baseDirectory, options.assets))) {
+    if (options.assets && false === grunt.file.isDir(path.join(baseDirectory, options.assets))) {
       grunt.fail.fatal(ERROR.INVALID_ASSETS_DIR);
     }
+    
+    var assetsDirectory = options.assets ? path.join(baseDirectory, options.assets) : false;
     
     //require a valid default template
     if (false === grunt.file.isFile(templateDirectory, options.defaultTemplate)) {
       grunt.fail.fatal(ERROR.INVALID_DEFAULT_TEMPLATE);  
     }
     
-    var documents = [];
+    var defaultTemplate = options.defaultTemplate;
     
     //= content ==============================================================//
+    
+    var documents = [];
     
     var markdownPaths = grunt.file.expand({
       cwd: contentDirectory,
@@ -85,11 +89,16 @@ module.exports = function (grunt) {
       matchBase: true
     }, '*.html');
     
-    var assetPaths = grunt.file.expand({
+    var contentAssetsPaths = grunt.file.expand({
       cwd: contentDirectory,
       filter: 'isFile',
       matchBase: true
     }, '*', '!*.html', '!*.md');
+    
+    var assetsPaths = assetsDirectory ? grunt.file.expand({
+      cwd: baseDirectory,
+      filter: 'isFile'
+    }, path.join(options.assets, '**/*')) : [];
     
     var templatePaths = grunt.file.expand({
       cwd: templateDirectory,
@@ -182,16 +191,24 @@ module.exports = function (grunt) {
     _.each(documents, function (doc) {
       scope = doc;
       grunt.file.write(
-        path.join(destinationDirectory, doc.dest), 
+        path.join(destDirectory, doc.dest), 
         partial(doc.template)
       );
     });
     
-    //copy assets
-    _.each(assetPaths, function (asset) {
+    //copy content assets
+    _.each(contentAssetsPaths, function (asset) {
       grunt.file.copy(
         path.join(contentDirectory, asset),
-        path.join(destinationDirectory, asset)
+        path.join(destDirectory, asset)
+      );
+    });
+    
+    //copy asset directory assets
+    _.each(assetsPaths, function (asset) {
+      grunt.file.copy(
+        path.join(baseDirectory, asset),
+        path.join(destDirectory, options.assets, asset)
       );
     });
     
