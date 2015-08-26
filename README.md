@@ -4,7 +4,7 @@ The easiest way to create a website with grunt
 
 ## Roadmap
 
-### 1.0.0
+### 0.1.0
 
 * Accept
   * A src directory (not files)
