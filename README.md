@@ -52,7 +52,7 @@ Post content
   <td style="text-align:left;vertical-align:top;"><pre>
 header.html<br/>
 &lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;
-footer.html
+<br>footer.html<br>
   &lt;/body&gt;<br/>&lt;/html&gt;
  </pre></td>
   <td style="text-align:left;vertical-align:top;"><pre>
