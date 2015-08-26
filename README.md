@@ -2,6 +2,68 @@
 
 The easiest way to create a website with grunt
 
+
+## Overview
+
+### Create a website with markdown using HTML templates
+
+<table>
+<tbody>
+<tr>
+  <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+<strong>template.html</strong>
+
+&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;%= content %&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
+  </pre></td>
+  <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+<strong>post.md</strong>
+
+---
+title: Post title
+template: template.html
+---
+
+# Post heading
+
+Post content
+</pre></td>
+  <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+<strong>post.html</strong>
+
+&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;Post title&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;h1&gt;Post heading&lt;/h1&gt;<br/>    &lt;p&gt;Post content&lt;/p&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
+  </pre></td>
+</tr>
+</tbody>
+</table>
+
+### Create a website with HTML using HTML templates
+
+<table>
+<tbody>
+<tr>
+  <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+<strong>page.html</strong>
+
+&lt;% partial('header.html') %&gt;<br/>&lt;main&gt;<br/>  &lt;h1&gt;Page heading&lt;/h1&gt;<br/>  &lt;p&gt;Page content&lt;/p&gt;<br/>&lt;/main&gt;<br/>&lt;% partial('footer.html') %&gt;  </pre></td>
+
+  <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+<strong>header.html</strong>
+
+&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;
+
+<strong>footer.html</strong> 
+
+  &lt;/body&gt;<br/>&lt;/html&gt;
+</pre></td>
+  <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
+<strong>page.html</strong>
+
+&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;Page title&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;h1&gt;Post heading&lt;/h1&gt;<br/>    &lt;p&gt;Post content&lt;/p&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
+  </pre></td>
+</tr>
+</tbody>
+</table>
+
 ## Getting Started
 
 This plugin requires Grunt `~0.4.0`
@@ -18,71 +80,12 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-site');
 ```
 
-## Create a website with markdown using HTML templates
-
-<table>
-<tbody>
-<tr>
-  <td style="text-align:left;vertical-align:top;padding:1em;"><pre>
-<strong>default.html</strong> _//template_
-
-&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;%= content %&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
-  </pre></td>
-  <td style="text-align:left;vertical-align:top;padding:1em;"><pre>
-<strong>post.md</strong> _//document_
-
----
-title: Post title
-template: post.html
----
-
-# Post heading
-
-Post content
-</pre></td>
-  <td style="text-align:left;vertical-align:top;padding:1em;"><pre>
-<strong>post.html</strong> _//output_
-
-&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;Post title&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;h1&gt;Post heading&lt;/h1&gt;<br/>    &lt;p&gt;Post content&lt;/p&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
-  </pre></td>
-</tr>
-</tbody>
-</table>
-
-## Create a website with HTML using HTML templates
-
-<table>
-<tbody>
-<tr>
-  <td style="text-align:left;vertical-align:top;padding:1em;"><pre>
-<strong>page.html</strong> _//html page_
-
-&lt;% partial('header.html') %&gt;<br/>&lt;main&gt;<br/>  &lt;h1&gt;Page heading&lt;/h1&gt;<br/>  &lt;p&gt;Page content&lt;/p&gt;<br/>&lt;/main&gt;<br/>&lt;% partial('footer.html') %&gt;  </pre></td>
-
-  <td style="text-align:left;vertical-align:top;padding:1em;"><pre>
-<strong>header.html</strong> _//partial_
-
-&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;
-
-<strong>footer.html</strong> 
-
-  &lt;/body&gt;<br/>&lt;/html&gt;
-</pre></td>
-  <td style="text-align:left;vertical-align:top;padding:1em;"><pre>
-<strong>page.html</strong> _//output_
-
-&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;Page title&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;h1&gt;Post heading&lt;/h1&gt;<br/>    &lt;p&gt;Post content&lt;/p&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
-  </pre></td>
-</tr>
-</tbody>
-</table>
-
 ## Basic project setup
 
 <table>
 <tbody>
   <tr>
-    <td style="text-align:left;vertical-align:top;padding:1em;"><pre>
+    <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
 <strong>Gruntfile.js</strong>
 
 module.exports = function(grunt) {
@@ -102,7 +105,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-site');
 };
     </pre></td>
-    <td style="text-align:left;vertical-align:top;padding:1em;"><pre>
+    <td style="text-align:left;vertical-align:top;padding:0.5em;"><pre>
 <strong>Directory structure</strong>
     
 - site _//site name_
