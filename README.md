@@ -202,9 +202,14 @@ Here are some things I have in mind in the future
 
 ## Changelog
 
-### 1.0.0
+### 0.3.0
 
-* Write basic documentation
+* remove assets option and copy proceedure (It should be performed by another grunt task. EG: grunt-contrib-copy)
+* replace marky-mark with marked and yaml-front-matter dependencies
+  * so that we can accept JSON front matter
+  * so that we can store only the exported content (save memory)
+  * so that we can optionally (in the future) only load meta data of all documents and export async
+* refactor template scope API (api yet to be defined)
 
 ### 0.2.0
 
