@@ -14,7 +14,6 @@ module.exports = function (grunt) {
     INVALID_FILES: 'site: invalid src or dest directory',
     INVALID_CONTENT_DIR: 'site: invalid content directory',
     INVALID_TEMPLATE_DIR: 'site: invalid templates directory',
-    INVALID_ASSETS_DIR: 'site: invalid assets directory',
     INVALID_DEFAULT_TEMPLATE: 'site: invalid default template',
   };
   
@@ -25,7 +24,6 @@ module.exports = function (grunt) {
     var options = this.options({
       site: {},
       content: 'content',
-      assets: 'assets',
       templates: 'templates',
       defaultTemplate: 'default.html'
     });
@@ -58,14 +56,7 @@ module.exports = function (grunt) {
     }
     
     var templateDirectory = path.join(baseDirectory, options.templates);
-    
-    //optionally require valid assets directory
-    if (options.assets && false === grunt.file.isDir(path.join(baseDirectory, options.assets))) {
-      grunt.fail.fatal(ERROR.INVALID_ASSETS_DIR);
-    }
-    
-    var assetsDirectory = options.assets ? path.join(baseDirectory, options.assets) : false;
-    
+        
     //require a valid default template
     if (false === grunt.file.isFile(templateDirectory, options.defaultTemplate)) {
       grunt.fail.fatal(ERROR.INVALID_DEFAULT_TEMPLATE);  
@@ -89,17 +80,12 @@ module.exports = function (grunt) {
       matchBase: true
     }, '*.html');
     
-    var contentAssetsPaths = grunt.file.expand({
+    var assetPaths = grunt.file.expand({
       cwd: contentDirectory,
       filter: 'isFile',
       matchBase: true
     }, '*', '!*.html', '!*.md');
-    
-    var assetsPaths = assetsDirectory ? grunt.file.expand({
-      cwd: baseDirectory,
-      filter: 'isFile'
-    }, path.join(options.assets, '**/*')) : [];
-    
+        
     var templatePaths = grunt.file.expand({
       cwd: templateDirectory,
       filter: 'isFile',
@@ -197,21 +183,13 @@ module.exports = function (grunt) {
     });
     
     //copy content assets
-    _.each(contentAssetsPaths, function (asset) {
+    _.each(assetPaths, function (asset) {
       grunt.file.copy(
         path.join(contentDirectory, asset),
         path.join(destDirectory, asset)
       );
     });
-    
-    //copy asset directory assets
-    _.each(assetsPaths, function (asset) {
-      grunt.file.copy(
-        path.join(baseDirectory, asset),
-        path.join(destDirectory, options.assets, asset)
-      );
-    });
-    
+        
   };
   
   grunt.registerMultiTask(name, desc, task);
