@@ -2,10 +2,9 @@
 
 The easiest way to create a website with grunt
 
-
 ## Overview
 
-### Create a website with markdown using HTML templates
+Using the `site` task, you can create a website using markdown from HTML templates
 
 <table>
 <thead>
@@ -34,34 +33,6 @@ Post content
 </tbody>
 </table>
 
-### Create a website with HTML using HTML templates
-
-<table>
-<thead>
-<tr>
-  <th style="text-align:left;vertical-align:top;">page.html</th>
-  <th style="text-align:left;vertical-align:top;">partials</th>
-  <th style="text-align:left;vertical-align:top;">page.html</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="text-align:left;vertical-align:top;"><pre>
-&lt;% partial('header.html') %&gt;<br/>&lt;main&gt;<br/>  &lt;h1&gt;Page heading&lt;/h1&gt;<br/>  &lt;p&gt;Page content&lt;/p&gt;<br/>&lt;/main&gt;<br/>&lt;% partial('footer.html') %&gt;  
-  </pre></td>
-  <td style="text-align:left;vertical-align:top;"><pre>
-header.html<br/>
-&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;&lt;%= title %&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;
-<br>footer.html<br>
-  &lt;/body&gt;<br/>&lt;/html&gt;
- </pre></td>
-  <td style="text-align:left;vertical-align:top;"><pre>
-&lt;DOCTYPE html&gt;<br/>&lt;html&gt;<br/>  &lt;head&gt;<br/>    &lt;title&gt;Page title&lt;/title&gt;<br/>  &lt;/head&gt;<br/>  &lt;body&gt;<br/>    &lt;h1&gt;Post heading&lt;/h1&gt;<br/>    &lt;p&gt;Post content&lt;/p&gt;<br/>  &lt;/body&gt;<br/>&lt;/html&gt;
-  </pre></td>
-</tr>
-</tbody>
-</table>
-
 ## Getting Started
 
 This plugin requires Grunt `~0.4.0`
@@ -77,64 +48,13 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 ```js
 grunt.loadNpmTasks('grunt-site');
 ```
-
-## Basic project setup
-
-<table>
-<thead>
-<tr>
-  <th style="text-align:left;vertical-align:top;">Gruntfile.js</th>
-  <th style="text-align:left;vertical-align:top;">Directory structure</th>
-</tr>
-</thead>
-<tbody>
-  <tr>
-    <td style="text-align:left;vertical-align:top;"><pre><code>module.exports = function(grunt) {
-  grunt.initConfig({
-    site: {
-      example: {
-        options: {
-          site: { //globals
-            url: 'http://localhost:8000',
-          }
-        },
-        src: 'site',
-        dest: 'dest'
-      }
-    }
-  });
-  grunt.loadNpmTasks('grunt-site');
-};
-    </code></pre></td>
-    <td style="text-align:left;vertical-align:top;"><pre><code>- site //site name
-  - content //content directory
-    - index.md //index page
-    - category //category name
-      - post-name //post name
-        - index.md //post
-        - Image.jpg //post asset
-      - index.md //archive
-    - page.html //html page
-  - assets //assets directory
-    - images
-      - image1.jpg
-  - templates //template directory
-    - default.html
-    </code></pre></td>
-  </tr>
-</tbody>
-</table>
-
-## Advanced project setup
-
-### Gruntfile.js
+## The site task
 
 ```js
-site: {
-  example: {
+site: { //site task
+  example: { //multi task name (EG: example)
     options: {
       content: 'content', //required, content directory, 'content' is default
-      assets: 'assets', //optional, assets directory, 'assets' is default
       templates: 'templates', //required, templates directory, 'templates' is default
       defaultTemplate: 'default.html' //required, default template, 'default.html' is default
     },
@@ -144,48 +64,78 @@ site: {
 }
 ```
 
-### Directory structure
+Although it is possible to customize the location of your directories via the
+site task options, it is recommended that you structure your grunt-site like this:
 
-<dl>
-<dt>src</dt>
-<dd>The src directory is the base directory which contains the content, assets, and templates directories</dd>
-<dt>dest</dt>
-<dd>The dest directory is the output directory of the generated website</dd>
-<dt>content</dt>
-<dd>The content directory contains the static structure and content of the website</dd>
-<dt>assets</dt>
-<dd>The assets directory is an optional directory that will be exactly copied into the dest</dd>
-<dt>templates</dt>
-<dd>The templates directory contains all partials used in content and other templates.</dd>
-</dl>
+```
+- dest //dest directory
+- site //src directory
+  - content //content directory
+  - templates //templates directory
+```
 
-### Creating templates
+##### The `content` directory
 
-Each content document (HTML or Markdown) has access to the following data
+All markdown and HTML documents inside the content directory will be parsed as
+content and exported into the destination directory (in the same directory
+structure as they are inside content) after passing through the template
+provided in their front-matter (or the default template if none is provided).
+
+All assets inside the content directory will be copied into the destination
+directory (in the same directory structure as they are inside content).
+
+##### The `templates` directory
+
+All files inside the templates directory will be parsed and cached as templates
+available via the partial function.
+
+## Writing content
+
+Content (inside the `content` direcotry) can be written in two formats:
+
+* [Markdown](http://daringfireball.net/projects/markdown/) (.md) (using [marked](https://www.npmjs.com/package/marked))
+* [HTML](http://www.w3.org/html/) (.html)
+
+Both of these content types accept front-matter in two formats:
+
+* [YAML](http://yaml.org/) (using [yaml-front-matter](https://www.npmjs.com/package/yaml-front-matter))
+* [JSON](http://json.org/) (using [yaml-front-matter](https://www.npmjs.com/package/yaml-front-matter))
+
+## Writing templates
+
+Templates (inside the `templates` directory) are compiled using
+[lodash templates](https://lodash.com/docs/#template).
+
+Each template is provided the following scope:
 
 ```js
-{
-   _: _, //lodash utility library
-  //EG: _.each, _.has, ...
+//each template has access to the following data from the current document
+var document = {
+  content: '<h1>Heading</h1><p>Content</p>' //the prased content of the document that is being rendered
+  ... //all front-matter attributes are first-class citizens on the document. EG: document.title
+};
+
+//each template has access to the following api functions
+var templateAPI = {
+  _: _, //lodash utility library
   path: path, //nodejs stdlib path module
-  //EG: path.join, path.normalize, ...
-  moment: moment, //momentjs utility library
-  //EG: moment, moment.format, moment.diff, ...
-  site: options.site, //global variables configured in Gruntfile.js
-  //EG: site.title, site.url, site.description, ...
-  documents: documents, //all content documents
-  //EG: _.each(documents, function(document) { ... });
-  partial: partial, //partial function for rendering other templates
-  //EG: <%= partial('header.html') %>
-  src: 'path/to/file.md', //path to src file
-  //EG: <%= src %>
-  dest: 'path/to/dest.html', //path to dest file (relative to content directory)
-  //EG: <a href="<%= site.url %>/<%= dest %>"><%= title %></a>
-  content: '...', //the HTML content of the content document that coorisponds to this template
-  //EG: <main><%= content %></main>, ...
-  ...: ... //all YAML front matter from the document that coorisponds to this template
-  //EG: <h1><%= title %></h1>, <% if (category === 'example') { %>, ...
-}
+  moment: moment, //momenjs date and time module
+  //render a template using the passed or default scope (templates are relatie to the templates directory)
+  partial: function (template, scope)
+  //loop only documents that exactly match the properties provided by the source parameter
+  where: function (source, callback),
+  //loop only documents that pass the filter function
+  filter: function (predicate, callback)
+};
+
+//each template has access to the following global data structures
+var globalScope = {
+  site: options.site, //global attributes configured in the Gruntfile
+  documents: documents, //all documents inside the content directory  
+};
+
+//each template has access to the previous three objects as it's scope while rendering
+partial(template, scope [scope = _.extend(document, templateAPI, globalScope)])
 ```
 
 ## Contributing
@@ -197,8 +147,6 @@ Here are some things I have in mind in the future
 * Support other template engines
 * Utility functions for templates
 * Unit tests
-* A gulp task equivilant 
-* A standalone binary
 
 ## Changelog
 
