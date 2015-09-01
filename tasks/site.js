@@ -101,6 +101,8 @@ module.exports = function (grunt) {
           //convert the markdown content into html content
           document.content = marked(document.content);
         }
+        //set document src so that we can reference it while debugging
+        document.src = documentPath;
         //set the document's exported destination based on the documentPath
         //note that .html files will just remain .html files.
         document.dest = documentPath.replace('.md', '.html');
@@ -134,7 +136,7 @@ module.exports = function (grunt) {
       try {
         return templates[template](_scope || scope);
       } catch (err) {
-        grunt.fail.fatal(err + ' in ' + src);
+        grunt.fail.fatal(err + ' in ' + template + ' from ' + scope.document.src);
       }
     };
     
