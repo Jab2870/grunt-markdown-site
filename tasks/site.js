@@ -1,7 +1,8 @@
 
 var _ = require('lodash');
-var mm = require('marky-mark');
 var path = require('path');
+var marked = require('marked');
+var frontMatter = require('yaml-front-matter');
 var moment = require('moment');
 
 module.exports = function (grunt) {
@@ -16,7 +17,7 @@ module.exports = function (grunt) {
     INVALID_TEMPLATE_DIR: 'site: invalid templates directory',
     INVALID_DEFAULT_TEMPLATE: 'site: invalid default template',
   };
-  
+    
   var task = function () {
     
     //= options ==============================================================//
@@ -28,8 +29,8 @@ module.exports = function (grunt) {
       defaultTemplate: 'default.html'
     });
     
-    //= validation ===========================================================//
-    
+    var site = options.site;
+        
     //require one valid src and one valid dest dir as a string
     if (
       this.files.length !== 1 || //one files entry
@@ -64,22 +65,14 @@ module.exports = function (grunt) {
     
     var defaultTemplate = options.defaultTemplate;
     
-    //= content ==============================================================//
-    
-    var documents = [];
-    
-    var markdownPaths = grunt.file.expand({
+    //= paths ================================================================//
+        
+    var documentPaths = grunt.file.expand({
       cwd: contentDirectory,
       filter: 'isFile',
       matchBase: true
-    }, '*.md');
-    
-    var htmlPaths = grunt.file.expand({
-      cwd: contentDirectory,
-      filter: 'isFile',
-      matchBase: true
-    }, '*.html');
-    
+    }, '*.md', '*.html')
+        
     var assetPaths = grunt.file.expand({
       cwd: contentDirectory,
       filter: 'isFile',
@@ -90,13 +83,39 @@ module.exports = function (grunt) {
       cwd: templateDirectory,
       filter: 'isFile',
       matchBase: true
-    }, '*.html');
+    }, '*');
+    
+    //= documents ============================================================//
+    
+    var documents = [];
+    
+    _.each(documentPaths, function (documentPath) {
+      try {
+        var document = frontMatter.loadFront(
+          grunt.file.read(
+            path.join(contentDirectory, documentPath)
+          ), 'content'
+        );
+        //if the document is a markdown document
+        if (documentPath.split('.').pop() === 'md') {
+          //convert the markdown content into html content
+          document.content = marked(document.content);
+        }
+        //set the document's exported destination based on the documentPath
+        //note that .html files will just remain .html files.
+        document.dest = documentPath.replace('.md', '.html');
+        //set template to default template if none is provided
+        document.template = document.template || defaultTemplate;
+        documents.push(document);
+      } catch (err) {
+        grunt.fail.fatal(err + ' in ' + documentPath);
+      }
+    });
     
     //= templates ============================================================//
     
     var templates = {};
     
-    //cache templates
     _.each(templatePaths, function (templatePath) {
       try {
         templates[templatePath] = _.template(
@@ -109,24 +128,11 @@ module.exports = function (grunt) {
       }
     });
     
-    //cache html as templates (fully qualified to avoid name conflicts)
-    _.each(htmlPaths, function (htmlPath) {
-      try {
-        templates[path.join(contentDirectory, htmlPath)] = _.template(
-          grunt.file.read(
-            path.join(contentDirectory, htmlPath)  
-          )  
-        );
-      } catch (err) {
-        grunt.fail.fatal(err + ' in ' + htmlPath);
-      }
-    });
-    
     //= partials =============================================================//
     
-    var partial = function (src) {
+    var partial = function (template, _scope) {
       try {
-        return templates[src](scope);
+        return templates[template](_scope || scope);
       } catch (err) {
         grunt.fail.fatal(err + ' in ' + src);
       }
@@ -136,53 +142,29 @@ module.exports = function (grunt) {
       _: _,
       path: path,
       moment: moment,
-      site: options.site,
+      site: site,
       documents: documents,
-      partial: partial
+      partial: partial,
+      //loop only documents that exactly match the properties provided by the source parameter
+      where: function (source, callback) {
+        return _.each(_.where(documents, source), callback);
+      },
+      //loop only documents that pass the filter function
+      filter: function (predicate, callback) {
+        return _.each(_.filter(documents, predicate), callback);
+      }
     };
-    
-    //= datastructure ========================================================//
-    
-    var markdown = mm.parseFilesSync(
-      //because markdownPaths are relative to the contentDirectory
-      markdownPaths.map(function (relativePath) {
-        return path.join(contentDirectory, relativePath);
-      })
-    );
-    
-    //extend documents with markdown
-    _.each(markdown, function (doc, index) {
-      var meta = doc.meta;
-      delete doc.meta;
-      documents.push(_.extend(meta, scope, doc, {
-        template: typeof meta.template === 'string' ? meta.template : defaultTemplate,
-        src: markdownPaths[index],
-        dest: markdownPaths[index].replace('.md', '.html'),
-      }));
-    });
-
-    //extend documents with html
-    _.each(htmlPaths, function (htmlPath, index) {
-      documents.push(_.extend({
-        //fully qualified template path to avoid name conflicts
-        template: path.join(contentDirectory, htmlPath),
-        src: htmlPath,
-        dest: htmlPath
-      }, scope));
-    });
     
     //= output ===============================================================//
     
-    //output documents
-    _.each(documents, function (doc) {
-      scope = doc;
+    _.each(documents, function (document) {
+      scope.document = document;
       grunt.file.write(
-        path.join(destDirectory, doc.dest), 
-        partial(doc.template)
+        path.join(destDirectory, document.dest), 
+        partial(document.template, _.extend({}, document, scope))
       );
     });
     
-    //copy content assets
     _.each(assetPaths, function (asset) {
       grunt.file.copy(
         path.join(contentDirectory, asset),
