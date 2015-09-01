@@ -2,9 +2,7 @@
 <nav>
   <%= content %>
   <ul>
-    <% _.each(documents, function (document) { %>
-    <% if(false === _.has(document, 'category')) return; %>
-    <% if(document.category !== 'example') return; %>
+    <% where({"category": "example"}, function (document) { %>
     <li><a href="<%= site.url %>/<%= document.dest %>"><%= document.title %></a></li>
     <% }); %>
   </ul>
