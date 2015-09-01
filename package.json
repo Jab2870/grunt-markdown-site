@@ -4,7 +4,7 @@
   "description": "The easiest way to create a website with grunt",
   "main": "tasks/site.js",
   "directories": {
-    "example": "example"
+    "example": "site"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,9 @@
     "md",
     "static",
     "website",
-    "documentation"
+    "documentation",
+    "html",
+    "templates"
   ],
   "author": "Julian Doucette <dev@juliandoucette.io> (http://juliandoucette.io)",
   "license": "LGPLv3",
@@ -33,7 +35,8 @@
   },
   "dependencies": {
     "lodash": "^3.10.1",
-    "marky-mark": "^1.2.1",
-    "moment": "^2.10.6"
+    "marked": "^0.3.5",
+    "moment": "^2.10.6",
+    "yaml-front-matter": "^3.2.3"
   }
 }
