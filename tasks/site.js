@@ -134,7 +134,7 @@ module.exports = function (grunt) {
     
     var partial = function (template, _scope) {
       try {
-        return templates[template](_scope || scope);
+        return templates[template](_scope || scope.scope);
       } catch (err) {
         grunt.fail.fatal(err + ' in ' + template + ' from ' + scope.document.src);
       }
@@ -161,6 +161,7 @@ module.exports = function (grunt) {
     
     _.each(documents, function (document) {
       scope.document = document;
+      scope.scope = _.extend({}, document, scope);
       grunt.file.write(
         path.join(destDirectory, document.dest), 
         partial(document.template, _.extend({}, document, scope))
