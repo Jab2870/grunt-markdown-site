@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title><%= site.title %></title>
+    <title><%= (document.title || site.title) %></title>
   </head>
   <body>
     <header>
-      <h1><%= site.title %></h1>  
+      <h1><%= (document.title || site.title) %></h1>  
     </header>
     <nav>
       <h1>Main Navigation</h1>
