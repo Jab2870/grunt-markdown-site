@@ -1,6 +1,6 @@
 {
   "name": "grunt-site",
-  "version": "0.3.3",
+  "version": "1.0.0",
   "description": "The easiest way to create a website with grunt",
   "main": "tasks/site.js",
   "repository": {
