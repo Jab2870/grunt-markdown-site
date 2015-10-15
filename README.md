@@ -76,30 +76,15 @@ site task options, it is recommended that you structure your grunt-site like thi
 
 ##### The `content` directory
 
-All markdown and HTML documents inside the content directory will be parsed as
+All markdown documents inside the content directory will be parsed as
 content and exported into the destination directory (in the same directory
 structure as they are inside content) after passing through the template
 provided in their front-matter (or the default template if none is provided).
-
-All assets inside the content directory will be copied into the destination
-directory (in the same directory structure as they are inside content).
 
 ##### The `templates` directory
 
 All files inside the templates directory will be parsed and cached as templates
 available via the partial function.
-
-## Writing content
-
-Content (inside the `content` direcotry) can be written in two formats:
-
-* [Markdown](http://daringfireball.net/projects/markdown/) (.md) (using [marked](https://www.npmjs.com/package/marked))
-* [HTML](http://www.w3.org/html/) (.html)
-
-Both of these content types accept front-matter in two formats:
-
-* [YAML](http://yaml.org/) (using [yaml-front-matter](https://www.npmjs.com/package/yaml-front-matter))
-* [JSON](http://json.org/) (using [yaml-front-matter](https://www.npmjs.com/package/yaml-front-matter))
 
 ## Writing templates
 
@@ -109,44 +94,19 @@ Templates (inside the `templates` directory) are compiled using
 Each template is provided the following scope:
 
 ```js
-//each template has access to the following data from the current document
-var document = {
-  content: '<h1>Heading</h1><p>Content</p>' //the prased content of the document that is being rendered
-  ... //all front-matter attributes are first-class citizens on the document. EG: document.title
-};
-
-//each template has access to the following api functions
-var templateAPI = {
+//All templates and partials have access to the following properties as globals and via the scope object
+var scope = {
   _: _, //lodash utility library
   path: path, //nodejs stdlib path module
   moment: moment, //momenjs date and time module
-  //render a template using the passed or default scope (templates are relatie to the templates directory)
-  partial: function (template, scope)
-  //loop only documents that exactly match the properties provided by the source parameter
-  where: function (source, callback),
-  //loop only documents that pass the filter function
-  filter: function (predicate, callback)
+  partial: function (template, scope)  //render a template using the passed or default scope (templates are relative to the templates directory)
+  scope: scope, //reference to self
+  //... : ... //All yaml-front-matter properties will be available here EG: title
+  content: '...', //the HTML content of the document that is currently being rendered,
+  document: document, //the currently rendering document (including all yaml-front-matter and the content property)
+  documents: documents, //all site documents: in the same format as document. This is ideal for creating archives, navs, lists, etc
 };
-
-//each template has access to the following global data structures
-var globalScope = {
-  site: options.site, //global attributes configured in the Gruntfile
-  documents: documents, //all documents inside the content directory  
-};
-
-//each template has access to the previous three objects as it's scope while rendering
-partial(template, scope [scope = _.extend(document, templateAPI, globalScope)])
 ```
-
-## Contributing
-
-I will review and potentially accept pull requests.
-
-Here are some things I have in mind in the future
-
-* Support other template engines
-* Utility functions for templates
-* Unit tests
 
 ## Changelog
 

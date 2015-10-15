@@ -6,31 +6,31 @@ var frontMatter = require('yaml-front-matter');
 var moment = require('moment');
 
 module.exports = function (grunt) {
-  
+
   var name = 'site';
-  
+
   var desc = 'The easiest way to create a website with grunt';
-  
+
   var ERROR = {
     INVALID_FILES: 'site: invalid src or dest directory',
     INVALID_CONTENT_DIR: 'site: invalid content directory',
     INVALID_TEMPLATE_DIR: 'site: invalid templates directory',
     INVALID_DEFAULT_TEMPLATE: 'site: invalid default template',
   };
-    
+
   var task = function () {
-    
+
     //= options ==============================================================//
-    
+
     var options = this.options({
       site: {},
       content: 'content',
       templates: 'templates',
       defaultTemplate: 'default.html'
     });
-    
+
     var site = options.site;
-        
+
     //require one valid src and one valid dest dir as a string
     if (
       this.files.length !== 1 || //one files entry
@@ -40,55 +40,49 @@ module.exports = function (grunt) {
     ) {
       grunt.fail.fatal(ERROR.INVALID_FILES);
     }
-    
+
     var baseDirectory = this.files[0].src[0];
     var destDirectory = this.files[0].dest;
-    
+
     //require valid content directory
     if (false === grunt.file.isDir(path.join(baseDirectory, options.content))) {
       grunt.fail.fatal(ERROR.INVALID_CONTENT_DIR);
     }
-    
+
     var contentDirectory = path.join(baseDirectory, options.content);
-    
+
     //require valid templates directory
     if (false === grunt.file.isDir(path.join(baseDirectory, options.templates))) {
       grunt.fail.fatal(ERROR.INVALID_TEMPLATE_DIR);
     }
-    
+
     var templateDirectory = path.join(baseDirectory, options.templates);
-        
+
     //require a valid default template
     if (false === grunt.file.isFile(templateDirectory, options.defaultTemplate)) {
-      grunt.fail.fatal(ERROR.INVALID_DEFAULT_TEMPLATE);  
+      grunt.fail.fatal(ERROR.INVALID_DEFAULT_TEMPLATE);
     }
-    
+
     var defaultTemplate = options.defaultTemplate;
-    
+
     //= paths ================================================================//
-        
+
     var documentPaths = grunt.file.expand({
       cwd: contentDirectory,
       filter: 'isFile',
       matchBase: true
-    }, '*.md', '*.html')
-        
-    var assetPaths = grunt.file.expand({
-      cwd: contentDirectory,
-      filter: 'isFile',
-      matchBase: true
-    }, '*', '!*.html', '!*.md');
-        
+    }, '*.md');
+
     var templatePaths = grunt.file.expand({
       cwd: templateDirectory,
       filter: 'isFile',
       matchBase: true
     }, '*');
-    
+
     //= documents ============================================================//
-    
+
     var documents = [];
-    
+
     _.each(documentPaths, function (documentPath) {
       try {
         var document = frontMatter.loadFront(
@@ -113,25 +107,25 @@ module.exports = function (grunt) {
         grunt.fail.fatal(err + ' in ' + documentPath);
       }
     });
-    
+
     //= templates ============================================================//
-    
+
     var templates = {};
-    
+
     _.each(templatePaths, function (templatePath) {
       try {
         templates[templatePath] = _.template(
           grunt.file.read(
-            path.join(templateDirectory, templatePath)  
-          )  
+            path.join(templateDirectory, templatePath)
+          )
         );
       } catch (err) {
         grunt.fail.fatal(err + ' in ' + templatePath);
       }
     });
-    
+
     //= partials =============================================================//
-    
+
     var partial = function (template, _scope) {
       try {
         return templates[template](_scope || scope.scope);
@@ -139,44 +133,29 @@ module.exports = function (grunt) {
         grunt.fail.fatal(err + ' in ' + template + ' from ' + scope.document.src);
       }
     };
-    
+
     var scope = {
       _: _,
       path: path,
       moment: moment,
       site: site,
       documents: documents,
-      partial: partial,
-      //loop only documents that exactly match the properties provided by the source parameter
-      where: function (source, callback) {
-        return _.each(_.where(documents, source), callback);
-      },
-      //loop only documents that pass the filter function
-      filter: function (predicate, callback) {
-        return _.each(_.filter(documents, predicate), callback);
-      }
+      partial: partial
     };
-    
+
     //= output ===============================================================//
-    
+
     _.each(documents, function (document) {
       scope.document = document;
       scope.scope = _.extend({}, document, scope);
       grunt.file.write(
-        path.join(destDirectory, document.dest), 
+        path.join(destDirectory, document.dest),
         partial(document.template, _.extend({}, document, scope))
       );
     });
-    
-    _.each(assetPaths, function (asset) {
-      grunt.file.copy(
-        path.join(contentDirectory, asset),
-        path.join(destDirectory, asset)
-      );
-    });
-        
+
   };
-  
+
   grunt.registerMultiTask(name, desc, task);
-  
+
 };

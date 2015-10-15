@@ -2,7 +2,7 @@
 <nav>
   <%= content %>
   <ul>
-    <% where({"category": "example"}, function (document) { %>
+    <% _.each(_.where(documents, {"category": "example"}), function (document) { %>
     <li><a href="<%= site.url %>/<%= document.dest %>"><%= document.title %></a></li>
     <% }); %>
   </ul>

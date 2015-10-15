@@ -1,6 +1,13 @@
 
 ## Changelog
 
+### 1.0.0
+
+* Removed the copy assets feature (it makes more sense to use another grunt task to do this)
+* Removed scope filter and where (it makes more sense to use underscore wherever possible)
+* Removed support for HTML documents inside content
+* Simplified documentation
+
 ### 0.3.0
 
 * remove assets option and copy proceedure (It should be performed by another grunt task. EG: grunt-contrib-copy)
@@ -29,7 +36,7 @@
 * Parse
   * markdown and html files
     * passing each *.md to it's configured template (in YAML or options.defaultTemplate)
-    * passing each *.md template access to it's coorisponding YAML, HTML content, and that of all other documents 
+    * passing each *.md template access to it's coorisponding YAML, HTML content, and that of all other documents
 * Generate
   * dest/\*\*/*.html
   * using lodash templates
