@@ -1,40 +1,62 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
+    
     site: {
-      example: {
+      site: {
         options: {
           site: {
-            url: 'http://localhost:8000',
-            title: 'Example'
-          }
+            title: 'Example',
+          },
+          templates: 'site/templates'
         },
-        src: 'site',
+        src: 'site/content',
         dest: 'dest'
       }
     },
+    
     connect: {
-      example: {
+      site: {
         options: {
           port: 8000,
           base: 'dest',
-          keepalive: true
+          livereload: true          
         }
       }
     },
+    
     jshint: {
       task: {
-        options: {},
         src: ['tasks/site.js']
       }
+    },
+
+    watch: {
+      reload: {
+        files: [
+          'dest/**/*'
+        ],
+        options: {
+          livereload: true
+        }
+      },
+      site: {
+        files: ['site/**/*'],
+        tasks: ['site']
+      },
+      task: {
+        files: ['tasks/*.js']
+      }
     }
+    
   });
 
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  
+  grunt.loadNpmTasks('grunt-contrib-watch');  
   grunt.loadTasks('tasks');
 
-  grunt.registerTask('default', ['site']);
+  grunt.registerTask('build', ['site']);
+  grunt.registerTask('default', ['jshint', 'site', 'connect', 'watch']);
 
 };
