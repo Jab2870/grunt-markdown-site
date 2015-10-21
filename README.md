@@ -78,9 +78,9 @@ it is recommended that your directory structure looks something like this:
 
 ## Writing markdown
 --------------------------------------------------------------------------------
-Markdown (.md) documents within the site src directory are parsed by marked 
-(see https://www.npmjs.com/package/marked) and yaml-front-matter 
-(see https://www.npmjs.com/package/yaml-front-matter). 
+[Markdown](http://daringfireball.net/projects/markdown/) documents within the 
+site src directory are parsed by [marked](https://www.npmjs.com/package/marked)
+and [yaml-front-matter](https://www.npmjs.com/package/yaml-front-matter).
 
 ```markdown
 ---
