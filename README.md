@@ -82,6 +82,8 @@ it is recommended that your directory structure looks something like this:
 site src directory are parsed by [marked](https://www.npmjs.com/package/marked)
 and [yaml-front-matter](https://www.npmjs.com/package/yaml-front-matter).
 
+#### Basic document example
+
 ```markdown
 ---
 title: Example title # example of a property that will be available inside the template as <%= title %> or <%= doc.title %>
