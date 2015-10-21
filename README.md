@@ -1,6 +1,6 @@
 # grunt-site
 
-The easiest way to create a website with grunt
+The easiest way to create a markdown website with grunt
 
 ## Overview
 
@@ -54,42 +54,52 @@ grunt.loadNpmTasks('grunt-site');
 site: { //site task
   example: { //multi task name (EG: example)
     options: {
-      content: 'content', //required, content directory, 'content' is default
-      templates: 'templates', //required, templates directory, 'templates' is default
-      defaultTemplate: 'default.html' //required, default template, 'default.html' is default
+      site: {}, //optional global variables available in all templates (EG: site.title, site.url)
+      extend: {}, //optional extend the scope object available in all templates (EG: By adding a utility library like momentjs)
+      marked: {}, //optional marked options, see https://github.com/chjj/marked for a detailed list of options
+      templates: 'src/templates', //required template directory (all partials and templates must be located inside this directory)
+      defaultTemplate: 'default.html' //required default template (used whenever "template" is not defined in a markdown document)
     },
-    src: 'site', //required, base directory, there is no default
-    dest: 'dest' //required, destination directory, there is no default
+    src: 'src/markdown', //required directory that markdown documents will be loaded from
+    dest: 'dest' //required directory that html documents will be output to
   }
 }
 ```
 
-Although it is possible to customize the location of your directories via the
-site task options, it is recommended that you structure your grunt-site like this:
+Although it is possible to customize these locations via the site task options,
+it is recommended that your directory structure looks something like this:
 
 ```
-- dest //dest directory
-- site //src directory
-  - content //content directory
-  - templates //templates directory
+- dest //site dest directory
+- src
+  - content //site src directory
+  - templates //site templates directory
 ```
 
-##### The `content` directory
+## Writing markdown
+--------------------------------------------------------------------------------
+Markdown (.md) documents within the site src directory are parsed by marked 
+(see https://www.npmjs.com/package/marked) and yaml-front-matter 
+(see https://www.npmjs.com/package/yaml-front-matter). 
 
-All markdown documents inside the content directory will be parsed as
-content and exported into the destination directory (in the same directory
-structure as they are inside content) after passing through the template
-provided in their front-matter (or the default template if none is provided).
+```markdown
+---
 
-##### The `templates` directory
+title: Example title # example of a property that will be available inside the template as <%= title %> or <%= doc.title %>
 
-All files inside the templates directory will be parsed and cached as templates
-available via the partial function.
+template: default.html # optional template property (this will default to the defaultTemplate if not provided)
+
+---
+
+# Example Headline
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+```
 
 ## Writing templates
 
 Templates (inside the `templates` directory) are compiled using
-[lodash templates](https://lodash.com/docs/#template).
+[lodash templates](https://www.npmjs.com/package/yaml-front-matter#template).
 
 Each template is provided the following scope:
 
@@ -98,16 +108,12 @@ Each template is provided the following scope:
 var scope = {
   _: _, //lodash utility library
   path: path, //nodejs stdlib path module
-  moment: moment, //momenjs date and time module
   partial: function (template, scope)  //render a template using the passed or default scope (templates are relative to the templates directory)
   scope: scope, //reference to self
+  //... : ... //All options.extend properties provided inside of Gruntfile
   //... : ... //All yaml-front-matter properties will be available here EG: title
   content: '...', //the HTML content of the document that is currently being rendered,
-  document: document, //the currently rendering document (including all yaml-front-matter and the content property)
-  documents: documents, //all site documents: in the same format as document. This is ideal for creating archives, navs, lists, etc
+  doc: document, //the currently rendering document (including all yaml-front-matter and the content property)
+  docs: documents, //all site documents: in the same format as document. This is ideal for creating archives, navs, lists, etc
 };
 ```
-
-## Changelog
-
-See CHANGELOG.md

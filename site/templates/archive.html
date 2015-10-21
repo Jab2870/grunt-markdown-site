@@ -1,10 +1,12 @@
 <%= partial('header.html') %>
-<nav>
-  <%= content %>
-  <ul>
-    <% _.each(_.where(documents, {"category": "example"}), function (document) { %>
-    <li><a href="<%= site.url %>/<%= document.dest %>"><%= document.title %></a></li>
-    <% }); %>
-  </ul>
-</nav>
+<main>
+    <h1><%= title %></h1>
+    <nav>
+        <ul>
+            <% _.each(_.where(docs, {"category": "archive"}), function (_doc) { %>
+            <li><a href="/<%= _doc.dest %>"><%= _doc.title %></a></li>
+            <% }); %>
+        </ul>
+    </nav>
+</main>
 <%= partial('footer.html') %>
