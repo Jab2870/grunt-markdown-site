@@ -1,4 +1,4 @@
-# grunt-site
+# grunt-markdown-site
 
 The easiest way to create a markdown website with grunt
 
@@ -84,11 +84,8 @@ Markdown (.md) documents within the site src directory are parsed by marked
 
 ```markdown
 ---
-
 title: Example title # example of a property that will be available inside the template as <%= title %> or <%= doc.title %>
-
 template: default.html # optional template property (this will default to the defaultTemplate if not provided)
-
 ---
 
 # Example Headline
@@ -116,4 +113,71 @@ var scope = {
   doc: document, //the currently rendering document (including all yaml-front-matter and the content property)
   docs: documents, //all site documents: in the same format as document. This is ideal for creating archives, navs, lists, etc
 };
+```
+
+### Basic document example
+
+##### default.html
+
+```html
+<%= partial('header.html') %>
+<main>
+  <%= content %>
+</main>
+<%= partial('footer.html') %>
+```
+
+##### header.html
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+  </head>
+  <body>
+```
+
+##### footer.html
+
+```html
+  </body>
+</html>
+```
+
+### Basic archive example
+
+##### default.html
+
+```html
+<%= partial('header.html') %>
+<main>
+    <h1><%= title %></h1>
+    <nav>
+        <ul>
+            <% _.each(_.where(docs, {"category": "archive"}), function (_doc) { %>
+            <li><a href="/<%= _doc.dest %>"><%= _doc.title %></a></li>
+            <% }); %>
+        </ul>
+    </nav>
+</main>
+<%= partial('footer.html') %>
+```
+
+##### header.html
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+  </head>
+  <body>
+```
+
+##### footer.html
+
+```html
+  </body>
+</html>
 ```
