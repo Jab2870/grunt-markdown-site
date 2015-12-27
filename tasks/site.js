@@ -11,7 +11,7 @@ module.exports = function (grunt) {
 
   /** task description */
   var desc = 'The easiest way to create a website with grunt';
-  
+
   /** task callback */
   var task = function () {
 
@@ -32,7 +32,7 @@ module.exports = function (grunt) {
     }
 
     //is the extend option valid?
-    if (false === _.isObject(options.site)) {
+    if (false === _.isObject(options.extend)) {
       grunt.fail.fatal('site: invalid extend option');
     } else {
       grunt.verbose.ok('site: valid extend option');
@@ -69,7 +69,7 @@ module.exports = function (grunt) {
     }
 
     var srcDir = this.files[0].src[0];
-    
+
     if (//is the dest directory valid?
       true !== _.isString(this.files[0].dest) //is there one dest entry?
     ) {
@@ -78,7 +78,7 @@ module.exports = function (grunt) {
       grunt.verbose.ok('site: valid dest directory');
     }
 
-    var destDir = this.files[0].dest;  
+    var destDir = this.files[0].dest;
 
     //is the templates dir valid?
     if (false === grunt.file.isDir(options.templates)) {
@@ -145,14 +145,14 @@ module.exports = function (grunt) {
       }
     };
 
-    var templates = {};    
+    var templates = {};
 
     var loadTemplate = function (src) {
       if (false === _.has(templates, src)) {
         try { //try to load template (compile with lodash)
           templates[src] = _.template(grunt.file.read(path.join(templateDir, src)));
           grunt.verbose.ok('site: ' + src + ' template loaded');
-        } catch (err) { 
+        } catch (err) {
           grunt.fail.warn('site: ' + err + ' in ' + src);
         }
       }
@@ -185,7 +185,7 @@ module.exports = function (grunt) {
       try {
         scope.doc = doc; //extend global scope with document
         scope.scope = _.extend({}, doc, scope); //extend global scope with document scope
-        //render template with document scope clone that references itself 
+        //render template with document scope clone that references itself
         grunt.file.write(
           path.join(destDir, doc.dest),
           partial(doc.template, _.extend({}, doc, scope))
