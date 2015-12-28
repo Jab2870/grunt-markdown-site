@@ -98,14 +98,6 @@ module.exports = function (grunt) {
 
     var defaultTemplate = options.defaultTemplate;
 
-    //is the extending scope valid?
-    if (false === _.isObject(options.extend)) {
-      grunt.fail.fatal('site: error extending scope');
-    } else {
-      _.extend(scope, options.extend);
-      grunt.verbose.ok('site: successfully extended scope');
-    }
-
     //expand src documents
     var docPaths = grunt.file.expand({
       cwd: srcDir,
@@ -164,10 +156,11 @@ module.exports = function (grunt) {
      * @param {Object} _scope - optional custom scope for template
      */
     var partial = function (template, _scope) {
+      var partialScope = _.extend({}, scope, _scope || {});
       try {
-        return templates[template](_scope || scope.scope);
+        return templates[template](partialScope);
       } catch (err) {
-        grunt.fail.warn(err + ' in ' + template + ' from ' + scope.doc.src);
+        grunt.fail.warn(err + ' in ' + template + ' from ' + partialScope.doc.src);
       }
     };
 
@@ -179,20 +172,24 @@ module.exports = function (grunt) {
       partial: partial
     };
 
-    _.extend(scope, options.extend);
+    //is the extending scope valid?
+    if (false === _.isObject(options.extend)) {
+      grunt.fail.fatal('site: error extending scope');
+    } else {
+      _.extend(scope, options.extend);
+      grunt.verbose.ok('site: successfully extended scope');
+    }
 
     var exportDoc = function (doc) {
       try {
-        scope.doc = doc; //extend global scope with document
-        scope.scope = _.extend({}, doc, scope); //extend global scope with document scope
-        //render template with document scope clone that references itself
+        scope.doc = doc;
         grunt.file.write(
           path.join(destDir, doc.dest),
-          partial(doc.template, _.extend({}, doc, scope))
+          partial(doc.template, doc)
         );
         grunt.verbose.ok('site: ' + doc.src + ' document exported');
       } catch (err) {
-        grunt.fail.warn(err, + ' in ' + dor.src);
+        grunt.fail.warn(err, + ' in ' + doc.src);
       }
     };
 

@@ -78,7 +78,7 @@ it is recommended that your directory structure looks something like this:
 
 ## Writing markdown
 --------------------------------------------------------------------------------
-[Markdown](http://daringfireball.net/projects/markdown/) documents within the 
+[Markdown](http://daringfireball.net/projects/markdown/) documents within the
 site src directory are parsed by [marked](https://www.npmjs.com/package/marked)
 and [yaml-front-matter](https://www.npmjs.com/package/yaml-front-matter).
 
@@ -108,7 +108,6 @@ var scope = {
   _: _, //lodash utility library
   path: path, //nodejs stdlib path module
   partial: function (template, scope)  //render a template using the passed or default scope (templates are relative to the templates directory)
-  scope: scope, //reference to self
   //... : ... //All options.extend properties provided inside of Gruntfile
   //... : ... //All yaml-front-matter properties will be available here EG: title
   content: '...', //the HTML content of the document that is currently being rendered,
