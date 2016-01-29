@@ -160,7 +160,11 @@ module.exports = function (grunt) {
       try {
         return templates[template](partialScope);
       } catch (err) {
-        grunt.fail.warn(err + ' in ' + template + ' from ' + partialScope.doc.src);
+        if (typeof templates[template] === 'undefined') {
+          grunt.fail.warn('site: missing "' + template + '" template in ' + partialScope.doc.src);
+        } else {
+          grunt.fail.warn('site: ' + err + ' in ' + template + ' from ' + partialScope.doc.src);
+        }
       }
     };
 
@@ -189,7 +193,7 @@ module.exports = function (grunt) {
         );
         grunt.verbose.ok('site: ' + doc.src + ' document exported');
       } catch (err) {
-        grunt.fail.warn(err, + ' in ' + doc.src);
+        grunt.fail.warn('site: ' + err, + ' in ' + doc.src);
       }
     };
 
