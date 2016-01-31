@@ -70,14 +70,13 @@ Although it is possible to customize these locations via the site task options,
 it is recommended that your directory structure looks something like this:
 
 ```
-- dest //site dest directory
-- src
-  - content //site src directory
-  - templates //site templates directory
+public //dest directory
+includes //template directory
+content //src directory
 ```
 
 ## Writing markdown
---------------------------------------------------------------------------------
+
 [Markdown](http://daringfireball.net/projects/markdown/) documents within the
 site src directory are parsed by [marked](https://www.npmjs.com/package/marked)
 and [yaml-front-matter](https://www.npmjs.com/package/yaml-front-matter).
@@ -98,7 +97,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 ## Writing templates
 
 Templates (inside the `templates` directory) are compiled using
-[lodash templates](https://www.npmjs.com/package/yaml-front-matter#template).
+[lodash templates](https://lodash.com/docs#template).
 
 Each template is provided the following scope:
 
@@ -116,16 +115,16 @@ var scope = {
 };
 ```
 
-### Basic document example
+### Basic template example
 
 ##### default.html
 
 ```html
-<%= partial('header.html') %>
+<%= partial('header.ejs') %>
 <main>
   <%= content %>
 </main>
-<%= partial('footer.html') %>
+<%= partial('footer.ejs') %>
 ```
 
 ##### header.html
@@ -151,7 +150,7 @@ var scope = {
 ##### default.html
 
 ```html
-<%= partial('header.html') %>
+<%= partial('header.ejs') %>
 <main>
     <h1><%= title %></h1>
     <nav>
@@ -162,7 +161,7 @@ var scope = {
         </ul>
     </nav>
 </main>
-<%= partial('footer.html') %>
+<%= partial('footer.ejs') %>
 ```
 
 ##### header.html
@@ -182,3 +181,10 @@ var scope = {
   </body>
 </html>
 ```
+
+## Exporting
+
+Documents will be excluded from the export proceedure if:
+
+- They do not include a title within yaml-front-matter
+- They define `exclude: true` within yaml-front-matter
