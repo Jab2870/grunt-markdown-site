@@ -185,6 +185,7 @@ module.exports = function (grunt) {
     }
 
     var exportDoc = function (doc) {
+      if (typeof doc.title === 'undefined' || doc.exclude === true) return;
       try {
         scope.doc = doc;
         grunt.file.write(
