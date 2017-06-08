@@ -1,3 +1,17 @@
+# This is a fork
+
+This repository is a fork of [grunt-markdown-site](https://github.com/juliandoucette/grunt-markdown-site/blob/master/LICENSE.txt).
+
+## Why?
+
+I would like to build on top of this work but rather than using the [marked](https://www.npmjs.com/package/marked) package for compiling markdown, I would like to use [pandoc](http://pandoc.org/).
+
+## Early Days
+
+I have only just forked the project and it isn't ready for use yet. Below is the original readme file.
+
+------------
+
 # grunt-markdown-site
 
 The easiest way to create a markdown website with grunt

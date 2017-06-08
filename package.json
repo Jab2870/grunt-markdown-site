@@ -1,15 +1,16 @@
 {
-  "name": "grunt-markdown-site",
-  "version": "4.1.0",
-  "description": "The easiest way to create a markdown website with grunt",
+  "name": "grunt-pandoc-site",
+  "version": "1.0.0",
+  "description": "Create a website using pandoc and lodash",
   "main": "tasks/site.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/juliandoucette/grunt-markdown-site.git"
+    "url": "https://github.com/jab2870/grunt-pandoc-site.git"
   },
   "keywords": [
     "grunt",
     "markdown",
+	"pandoc",
     "site",
     "generator",
     "md",
@@ -19,12 +20,13 @@
     "html",
     "templates"
   ],
-  "author": "Julian Doucette <dev@juliandoucette.io> (http://juliandoucette.io)",
+  "original-author": "Julian Doucette <dev@juliandoucette.io> (http://juliandoucette.io)",
+  "author": "Jonathan Hodgson <jonathan@lunarweb.co.uk> (https://jonathanh.co.uk)",
   "license": "LGPLv3",
   "bugs": {
-    "url": "https://github.com/juliandoucette/grunt-markdown-site/issues"
+    "url": "https://github.com/jab2870/grunt-pandoc-site/issues"
   },
-  "homepage": "https://github.com/juliandoucette/grunt-markdown-site",
+  "homepage": "https://github.com/juliandoucette/grunt-pandoc-site",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-connect": "^0.11.2",
