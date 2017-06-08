@@ -11,7 +11,7 @@ module.exports = function(grunt) {
 					templates: 'site/templates'
 				},
 				src: 'site/content',
-				dest: 'dest'
+				dest: 'public_html'
 			}
 		},
 		
