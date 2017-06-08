@@ -1,4 +1,4 @@
-# This is a fork
+# grunt-pandoc-site
 
 This repository is a fork of [grunt-markdown-site](https://github.com/juliandoucette/grunt-markdown-site/blob/master/LICENSE.txt).
 
