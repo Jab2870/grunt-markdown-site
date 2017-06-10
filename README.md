@@ -41,6 +41,7 @@ site: { //site task
  - [ ] Validate pandoc option string
  - [ ] Give the option to compile to things other than HTML
  - [ ] Look for files other than .md as source files
+ - [ ] Run Pandoc command asynchronous. 
 
 # grunt-markdown-site
 
