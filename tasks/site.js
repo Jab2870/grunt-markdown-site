@@ -1,212 +1,231 @@
-
 var _ = require('lodash');
 var path = require('path');
-var marked = require('marked');
+var exec = require('child_process').execSync;
+//var marked = require('marked');
+var pandoc = require('node-pandoc');
+//var pandoc = require('../modifiedModules/node-pandoc/');
 var frontMatter = require('yaml-front-matter');
 
 module.exports = function (grunt) {
 
-  /** task name */
-  var name = 'site';
+	/** task name */
+	var name = 'site';
 
-  /** task description */
-  var desc = 'The easiest way to create a website with grunt';
+	/** task description */
+	var desc = 'The easiest way to create a website with grunt and pandoc';
 
-  /** task callback */
-  var task = function () {
+	/** task callback */
+	var task = function () {
 
-    //grunt task options
-    var options = this.options({
-      site: {},
-      extend: {},
-      marked: {},
-      templates: 'templates',
-      defaultTemplate: 'default.html'
-    });
+		//grunt task options
+		var options = this.options({
+			site: {},
+			extend: {},
+			marked: {},
+			pandoc: '-f markdown -t html5',
+			templates: 'templates',
+			defaultTemplate: 'default.html'
+		});
 
-    //is the site option valid?
-    if (false === _.isObject(options.site)) {
-      grunt.fail.fatal('site: invalid site option');
-    } else {
-      grunt.verbose.ok('site: valid site option');
-    }
+		//is the site option valid?
+		if (false === _.isObject(options.site)) {
+			grunt.fail.fatal('site: invalid site option');
+		} else {
+			grunt.verbose.ok('site: valid site option');
+		}
 
-    //is the extend option valid?
-    if (false === _.isObject(options.extend)) {
-      grunt.fail.fatal('site: invalid extend option');
-    } else {
-      grunt.verbose.ok('site: valid extend option');
-    }
+		//is the extend option valid?
+		if (false === _.isObject(options.extend)) {
+			grunt.fail.fatal('site: invalid extend option');
+		} else {
+			grunt.verbose.ok('site: valid extend option');
+		}
 
-    //is the marked option valid?
-    if (false === _.isObject(options.marked)) {
-      grunt.fail.fatal('site: invalid marked option');
-    } else {
-      grunt.verbose.ok('site: valid marked option');
-    }
+		//is the marked option valid?
+		//if (false === _.isObject(options.marked)) {
+		//	grunt.fail.fatal('site: invalid marked option');
+		//} else {
+		//	grunt.verbose.ok('site: valid marked option');
+		//}
 
-    //setting marked options
-    marked.setOptions(options.marked);
+		//is the pandoc option valid?
+		//
+		//		I need to make this check for an array or string
+		//		For now - assume it's ok :/
+		//
+		//if (false === _.isObject(options.pandoc)) {
+		//	grunt.fail.fatal('site: invalid pandoc option');
+		//} else {
+		//	grunt.verbose.ok('site: valid pandoc option');
+		//}
 
-    //is the files entry valid?
-    if (
-      false === _.isArray(this.files) || //is there a files array?
-      1 !== this.files.length //is the files array valid?
-    ) {
-      grunt.fail.fatal('site: invalid files entry');
-    } else {
-      grunt.verbose.ok('site: valid files entry');
-    }
+		//setting marked options
+		//marked.setOptions(options.marked);
 
-    if ( //is the src directory valid?
-      false === _.isArray(this.files[0].src) || //is there a src array?
-      1 !== this.files[0].src.length || //is there one src entry?
-      true !== grunt.file.isDir(this.files[0].src[0]) //is the src entry valid?
-    ) {
-      grunt.fail.fatal('site: invalid src directory');
-    } else {
-      grunt.verbose.ok('site: valid src directory');
-    }
+		//is the files entry valid?
+		if (
+			false === _.isArray(this.files) || //is there a files array?
+			1 !== this.files.length //is the files array valid?
+		) {
+			grunt.fail.fatal('site: invalid files entry');
+		} else {
+			grunt.verbose.ok('site: valid files entry');
+		}
 
-    var srcDir = this.files[0].src[0];
+		if ( //is the src directory valid?
+			false === _.isArray(this.files[0].src) || //is there a src array?
+			1 !== this.files[0].src.length || //is there one src entry?
+			true !== grunt.file.isDir(this.files[0].src[0]) //is the src entry valid?
+		) {
+			grunt.fail.fatal('site: invalid src directory');
+		} else {
+			grunt.verbose.ok('site: valid src directory');
+		}
 
-    if (//is the dest directory valid?
-      true !== _.isString(this.files[0].dest) //is there one dest entry?
-    ) {
-      grunt.fail.fatal('site: invalid dest directory');
-    } else {
-      grunt.verbose.ok('site: valid dest directory');
-    }
+		var srcDir = this.files[0].src[0];
 
-    var destDir = this.files[0].dest;
+		if (//is the dest directory valid?
+			true !== _.isString(this.files[0].dest) //is there one dest entry?
+		) {
+			grunt.fail.fatal('site: invalid dest directory');
+		} else {
+			grunt.verbose.ok('site: valid dest directory');
+		}
 
-    //is the templates dir valid?
-    if (false === grunt.file.isDir(options.templates)) {
-      grunt.fail.fatal('site: invalid template directory');
-    } else {
-      grunt.verbose.ok('site: valid template directory');
-    }
+		var destDir = this.files[0].dest;
 
-    var templateDir = options.templates;
+		//is the templates dir valid?
+		if (false === grunt.file.isDir(options.templates)) {
+			grunt.fail.fatal('site: invalid template directory');
+		} else {
+			grunt.verbose.ok('site: valid template directory');
+		}
 
-    //is the default template valid?
-    if (false === grunt.file.isFile(path.join(templateDir, options.defaultTemplate))) {
-      grunt.fail.fatal('site: invalid default template');
-    } else {
-      grunt.verbose.ok('site: valid default template');
-    }
+		var templateDir = options.templates;
 
-    var defaultTemplate = options.defaultTemplate;
+		//is the default template valid?
+		if (false === grunt.file.isFile(path.join(templateDir, options.defaultTemplate))) {
+			grunt.fail.fatal('site: invalid default template');
+		} else {
+			grunt.verbose.ok('site: valid default template');
+		}
 
-    //expand src documents
-    var docPaths = grunt.file.expand({
-      cwd: srcDir,
-      filter: 'isFile',
-      matchBase: true
-    }, '*.md');
+		var defaultTemplate = options.defaultTemplate;
 
-    grunt.verbose.ok('site: ' + docPaths.length + ' document paths expanded');
+		//expand src documents
+		var docPaths = grunt.file.expand({
+			cwd: srcDir,
+			filter: 'isFile',
+			matchBase: true
+		}, '*.md');
+		/* I will want to add more file extentions here eventually!!!! */
 
-    //expand template dir if set
-    var templatePaths = grunt.file.expand({
-      cwd: templateDir,
-      filter: 'isFile',
-      matchBase: true
-    }, '*');
+		grunt.verbose.ok('site: ' + docPaths.length + ' document paths expanded');
 
-    grunt.verbose.ok('site: ' + templatePaths.length + ' template paths expanded');
+		//expand template dir if set
+		var templatePaths = grunt.file.expand({
+			cwd: templateDir,
+			filter: 'isFile',
+			matchBase: true
+		}, '*');
 
-    var docs = [];
+		grunt.verbose.ok('site: ' + templatePaths.length + ' template paths expanded');
 
-    var loadDoc = function(src) {
-      try {
-        //parse frontmatter and load content into doc.content
-        var doc = frontMatter.loadFront(
-          grunt.file.read(path.join(srcDir, src)),
-          'content'
-        );
-        //parse content with marked
-        doc.content = marked(doc.content);
-        doc.src = src;
-        doc.dest = src.replace('.md', '.html');
-        doc.template = doc.template || defaultTemplate;
-        docs.push(doc);
-        grunt.verbose.ok('site: ' + src + ' document loaded');
-      } catch (err) {
-        grunt.fail.warn('site: ' + err + ' in ' + src);
-      }
-    };
+		var docs = [];
 
-    var templates = {};
+		var loadDoc = function(src) {
+			try {
+				var pandocOutput;
+				//parse frontmatter and load content into doc.content
+				/* frontMatter is used to parse the yaml block at the begining and adds the contents after the yaml block to the object with a key: 'content' */
+				var doc = frontMatter.loadFront(
+					grunt.file.read(path.join(srcDir, src)),
+					'content'
+				);
+				//parse content with marked
+				//doc.content = marked(doc.content);
+				var command = "pandoc " + options.pandoc;
+				doc.content = exec(command, {input: doc.content}).toString();
+				doc.src = src;
+				doc.dest = src.replace('.md', '.html');
+				doc.template = doc.template || defaultTemplate;
+				docs.push(doc);
+				grunt.verbose.ok('site: ' + src + ' document loaded');
+			} catch (err) {
+				grunt.fail.warn('site: ' + err + ' in ' + src);
+			}
+		};
 
-    var loadTemplate = function (src) {
-      if (false === _.has(templates, src)) {
-        try { //try to load template (compile with lodash)
-          templates[src] = _.template(grunt.file.read(path.join(templateDir, src)));
-          grunt.verbose.ok('site: ' + src + ' template loaded');
-        } catch (err) {
-          grunt.fail.warn('site: ' + err + ' in ' + src);
-        }
-      }
-    };
+		var templates = {};
 
-    /**
-     * Render a template (document or inline)
-     * @param {String} template - key inside templates collection
-     * @param {Object} _scope - optional custom scope for template
-     */
-    var partial = function (template, _scope) {
-      var partialScope = _.extend({}, scope, _scope || {});
-      try {
-        return templates[template](partialScope);
-      } catch (err) {
-        if (typeof templates[template] === 'undefined') {
-          grunt.fail.warn('site: missing "' + template + '" template in ' + partialScope.doc.src);
-        } else {
-          grunt.fail.warn('site: ' + err + ' in ' + template + ' from ' + partialScope.doc.src);
-        }
-      }
-    };
+		var loadTemplate = function (src) {
+			if (false === _.has(templates, src)) {
+				try { //try to load template (compile with lodash)
+					templates[src] = _.template(grunt.file.read(path.join(templateDir, src)));
+					grunt.verbose.ok('site: ' + src + ' template loaded');
+				} catch (err) {
+					grunt.fail.warn('site: ' + err + ' in ' + src);
+				}
+			}
+		};
 
-    var scope = {
-      _: _,
-      path: path,
-      site: options.site,
-      docs: docs,
-      partial: partial
-    };
+		/**
+		 * Render a template (document or inline)
+		 * @param {String} template - key inside templates collection
+		 * @param {Object} _scope - optional custom scope for template
+		 */
+		var partial = function (template, _scope) {
+			var partialScope = _.extend({}, scope, _scope || {});
+			try {
+				return templates[template](partialScope);
+			} catch (err) {
+				if (typeof templates[template] === 'undefined') {
+					grunt.fail.warn('site: missing "' + template + '" template in ' + partialScope.doc.src);
+				} else {
+					grunt.fail.warn('site: ' + err + ' in ' + template + ' from ' + partialScope.doc.src);
+				}
+			}
+		};
 
-    //is the extending scope valid?
-    if (false === _.isObject(options.extend)) {
-      grunt.fail.fatal('site: error extending scope');
-    } else {
-      _.extend(scope, options.extend);
-      grunt.verbose.ok('site: successfully extended scope');
-    }
+		var scope = {
+			_: _,
+			path: path,
+			site: options.site,
+			docs: docs,
+			partial: partial
+		};
 
-    var exportDoc = function (doc) {
-      if (typeof doc.title === 'undefined' || doc.exclude === true) return;
-      try {
-        scope.doc = doc;
-        grunt.file.write(
-          path.join(destDir, doc.dest),
-          partial(doc.template, doc)
-        );
-        grunt.verbose.ok('site: ' + doc.src + ' document exported');
-      } catch (err) {
-        grunt.fail.warn('site: ' + err, + ' in ' + doc.src);
-      }
-    };
+		//is the extending scope valid?
+		if (false === _.isObject(options.extend)) {
+			grunt.fail.fatal('site: error extending scope');
+		} else {
+			_.extend(scope, options.extend);
+			grunt.verbose.ok('site: successfully extended scope');
+		}
 
-    _.each(docPaths, loadDoc);
-    grunt.verbose.ok('site: finished loading documents.');
-    _.each(templatePaths, loadTemplate);
-    grunt.verbose.ok('site: finished loading templates.');
-    _.each(docs, exportDoc);
-    grunt.verbose.ok('site: finished exporting documents.');
+		var exportDoc = function (doc) {
+			if (typeof doc.title === 'undefined' || doc.exclude === true) return;
+			try {
+				scope.doc = doc;
+				grunt.file.write(
+					path.join(destDir, doc.dest),
+					partial(doc.template, doc)
+				);
+				grunt.verbose.ok('site: ' + doc.src + ' document exported');
+			} catch (err) {
+				grunt.fail.warn('site: ' + err, + ' in ' + doc.src);
+			}
+		};
 
-  };
+		_.each(docPaths, loadDoc);
+		grunt.verbose.ok('site: finished loading documents.');
+		_.each(templatePaths, loadTemplate);
+		grunt.verbose.ok('site: finished loading templates.');
+		_.each(docs, exportDoc);
+		grunt.verbose.ok('site: finished exporting documents.');
 
-  grunt.registerMultiTask(name, desc, task);
+	};
+
+	grunt.registerMultiTask(name, desc, task);
 
 };
