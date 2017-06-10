@@ -6,9 +6,28 @@ This repository is a fork of [grunt-markdown-site](https://github.com/juliandouc
 
 I would like to build on top of this work but rather than using the [marked](https://www.npmjs.com/package/marked) package for compiling markdown, I would like to use [pandoc](http://pandoc.org/).
 
-## Early Days
+## How's it going
 
-I have only just forked the project and it isn't ready for use yet. Below is the original readme file.
+If you have Pandoc installed on your system, you should now be able to run `grunt build` to build the site now. It will use pandoc to convert the markdown files into HTML5 files.
+
+Below is the original readme. Most is still valid except the grunt options no longer use the marked key, there is now a pandoc key that takes the command line string to feed to pandoc.
+
+```js
+site: { //site task
+  example: { //multi task name (EG: example)
+    options: {
+      site: {}, //optional global variables available in all templates (EG: site.title, site.url)
+      extend: {}, //optional extend the scope object available in all templates (EG: By adding a utility library like momentjs)
+      pandoc: '-f markdown -t html5', //The options for pandoc
+      templates: 'src/templates', //required template directory (all partials and templates must be located inside this directory)
+      defaultTemplate: 'default.html' //required default template (used whenever "template" is not defined in a markdown document)
+    },
+    src: 'src/markdown', //required directory that markdown documents will be loaded from
+    dest: 'dest' //required directory that html documents will be output to
+  }
+}
+```
+
 
 ------------
 
