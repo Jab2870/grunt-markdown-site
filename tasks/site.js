@@ -148,6 +148,7 @@ module.exports = function (grunt) {
 				doc.content = exec(command, {input: doc.content}).toString();
 				doc.src = src;
 				doc.dest = src.replace('.md', '.html');
+				doc.url = doc.dest.replace('index.html','');
 				doc.template = doc.template || defaultTemplate;
 				docs.push(doc);
 				grunt.verbose.ok('site: ' + src + ' document loaded');
