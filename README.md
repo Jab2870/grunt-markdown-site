@@ -43,7 +43,8 @@ site: { //site task
  - [ ] Look for files other than .md as source files
  - [ ] Run Pandoc command asynchronous. 
 
-# grunt-markdown-site
+
+# Original grunt-markdown-site README
 
 The easiest way to create a markdown website with grunt
 
