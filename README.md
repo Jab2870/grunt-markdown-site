@@ -31,6 +31,13 @@ site: { //site task
 
 ------------
 
+## ToDo
+
+ - [x] Use Pandoc rather than mmarked for conversion
+ - [ ] Validate pandoc variable string
+ - [ ] Give the option to compile to things other than HTML
+ - [ ] Look for files other than .md as source files
+
 # grunt-markdown-site
 
 The easiest way to create a markdown website with grunt
