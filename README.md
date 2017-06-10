@@ -6,6 +6,10 @@ This repository is a fork of [grunt-markdown-site](https://github.com/juliandouc
 
 I would like to build on top of this work but rather than using the [marked](https://www.npmjs.com/package/marked) package for compiling markdown, I would like to use [pandoc](http://pandoc.org/).
 
+Once pandoc is being used rather than marked, we should be able to convert to files other than HTML, maybe PDFs (using LaTeX) or DOCX.
+
+We could also potentially use files other than markdown as source files.
+
 ## How's it going
 
 If you have Pandoc installed on your system, you should now be able to run `grunt build` to build the site now. It will use pandoc to convert the markdown files into HTML5 files.
@@ -33,8 +37,8 @@ site: { //site task
 
 ## ToDo
 
- - [x] Use Pandoc rather than mmarked for conversion
- - [ ] Validate pandoc variable string
+ - [x] Use Pandoc rather than marked for conversion
+ - [ ] Validate pandoc option string
  - [ ] Give the option to compile to things other than HTML
  - [ ] Look for files other than .md as source files
 
