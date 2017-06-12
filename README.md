@@ -38,11 +38,61 @@ site: { //site task
 ## ToDo
 
  - [x] Use Pandoc rather than marked for conversion
- - [ ] Validate pandoc option string
+ - [x] Validate pandoc option string
+ * [ ] Build system for generating menus
+ * [ ] Add hierarchy to pages so in global sites object, not all pages are in 1 level (This will probably take the form of nested objects
  - [ ] Give the option to compile to things other than HTML
  - [ ] Look for files other than .md as source files
  - [ ] Run Pandoc command asynchronous. 
 
+### Notes
+
+This section is for my reference. I will put notes here for how I plan on doing things
+
+#### Hierarchy
+I would like to make the Site object passed to the lodash template have a hierarchy rather than just an array of pages. It would probably take this sort of form
+
+```js
+[
+	{
+		title: "blar",
+		...: ...
+		childPages: [
+			{
+				title: "blar2",
+				...: ...
+				childPages: [
+					{
+						title: "blar3",
+						...: ...
+					}
+				]
+			}, {
+				title: "blar4",
+				...: ...
+				childPages: [
+					{
+						title: "blar5",
+						...: ...
+					}
+				]
+			}
+
+		]
+	},{
+		title: "blar6",
+		...:...
+	},{
+		title: "blar7",
+		...:...
+	},{
+		title: "blar8",
+		...:...
+	}
+]
+```
+
+This would then aid in generating menus as well
 
 # Original grunt-markdown-site README
 
