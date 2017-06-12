@@ -48,16 +48,14 @@ module.exports = function (grunt) {
 		//	grunt.verbose.ok('site: valid marked option');
 		//}
 
-		//is the pandoc option valid?
-		//
-		//		I need to make this check for an array or string
-		//		For now - assume it's ok :/
-		//
-		//if (false === _.isObject(options.pandoc)) {
-		//	grunt.fail.fatal('site: invalid pandoc option');
-		//} else {
-		//	grunt.verbose.ok('site: valid pandoc option');
-		//}
+		// Checks that the pandoc string is a string and doesn't try to specify an output file
+		if (false === _.isString(options.pandoc)) {
+			grunt.fail.fatal('site: invalid pandoc option');
+		} else if ( -1 === options.pandoc.indexOf("-o") ){
+			grunt.fail.fatal('site: you can\'t give an output file as on option to pandoc when using it with site generator');
+		} else {
+			grunt.verbose.ok('site: valid pandoc option');
+		}
 
 		//setting marked options
 		//marked.setOptions(options.marked);
