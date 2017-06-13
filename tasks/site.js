@@ -19,12 +19,14 @@ module.exports = function (grunt) {
 
 		//grunt task options
 		var options = this.options({
+			//This is an object of site-wide of properties that will be part of the scope in the templates
 			site: {},
 			extend: {},
 			marked: {},
 			pandoc: '-f markdown -t html5',
 			templates: 'templates',
-			defaultTemplate: 'default.html'
+			defaultTemplate: 'default',
+			extention: 'html'
 		});
 
 		//is the site option valid?
@@ -51,7 +53,7 @@ module.exports = function (grunt) {
 		// Checks that the pandoc string is a string and doesn't try to specify an output file
 		if (false === _.isString(options.pandoc)) {
 			grunt.fail.fatal('site: invalid pandoc option');
-		} else if ( -1 === options.pandoc.indexOf("-o") ){
+		} else if ( -1 !== options.pandoc.indexOf("-o") ){
 			grunt.fail.fatal('site: you can\'t give an output file as on option to pandoc when using it with site generator');
 		} else {
 			grunt.verbose.ok('site: valid pandoc option');
@@ -102,13 +104,13 @@ module.exports = function (grunt) {
 		var templateDir = options.templates;
 
 		//is the default template valid?
-		if (false === grunt.file.isFile(path.join(templateDir, options.defaultTemplate))) {
+		if (false === grunt.file.isFile(path.join(templateDir, options.defaultTemplate + "." + options.extention ))) {
 			grunt.fail.fatal('site: invalid default template');
 		} else {
 			grunt.verbose.ok('site: valid default template');
 		}
 
-		var defaultTemplate = options.defaultTemplate;
+		var defaultTemplate = options.defaultTemplate + "." + options.extention;
 
 		//expand src documents
 		var docPaths = grunt.file.expand({
@@ -160,7 +162,9 @@ module.exports = function (grunt) {
 		var loadTemplate = function (src) {
 			if (false === _.has(templates, src)) {
 				try { //try to load template (compile with lodash)
-					templates[src] = _.template(grunt.file.read(path.join(templateDir, src)));
+					var re = new RegExp("\." + options.extention + "$");
+					var key = src.replace(re,"");
+					templates[key] = _.template(grunt.file.read(path.join(templateDir, src)));
 					grunt.verbose.ok('site: ' + src + ' template loaded');
 				} catch (err) {
 					grunt.fail.warn('site: ' + err + ' in ' + src);
@@ -176,6 +180,12 @@ module.exports = function (grunt) {
 		var partial = function (template, _scope) {
 			var partialScope = _.extend({}, scope, _scope || {});
 			try {
+				var re = new RegExp("\." + options.extention + "$");
+				template = template.replace(re,"");
+				if( undefined === templates[template] ){
+					grunt.verbose.ok( "Template '" + template + "' not found, using the default: '" + defaultTemplate + "' instead");
+					template = defaultTemplate.replace(re,"");
+				}
 				return templates[template](partialScope);
 			} catch (err) {
 				if (typeof templates[template] === 'undefined') {
