@@ -147,7 +147,7 @@ module.exports = function (grunt) {
 				var command = "pandoc " + options.pandoc;
 				doc.content = exec(command, {input: doc.content}).toString();
 				doc.src = src;
-				doc.dest = src.replace('.md', '.html');
+				doc.dest = src.replace('.md', '.' + options.extention);
 				doc.url = doc.dest.replace('index.html','');
 				doc.template = doc.template || defaultTemplate;
 				docs.push(doc);
