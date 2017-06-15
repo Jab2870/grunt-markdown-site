@@ -26,7 +26,8 @@ module.exports = function (grunt) {
 			pandoc: '-f markdown -t html5',
 			templates: 'templates',
 			defaultTemplate: 'default',
-			extention: 'html'
+			extention: 'html',
+			path: "directory" //Options are path or directory.
 		});
 
 		//is the site option valid?
@@ -59,6 +60,34 @@ module.exports = function (grunt) {
 			grunt.verbose.ok('site: valid pandoc option');
 		}
 
+		//is the path variable valid
+		// Directory:	The file blog/post1.md will produce the url blog/post1/
+		// Path:		The file blog/post1.md will produce the url blog/post1.html
+		//
+		// There is curretly no error checking here. There is the potential for errors with a directory like the following
+		//
+		// -
+		// |- blog.md
+		// |- blog/
+		// |    |- index.md
+		//
+		// In this example, both files will try to write to the file /blog/index.html
+		// For this reason, it is recomended that you don't give files the same name as a directory in the same parent directory
+		if (false === _.isString(options.path)) {
+			grunt.fail.fatal('site: invalid path option');
+		} else {
+			var validOptions = ['path','directory'];
+			if( -1 === validOptions.indexOf(options.path.toLowerCase()) ){
+				grunt.fail.fatal('site: invalid path option. Valid options are "directory" and "path" ');
+			} else {
+				grunt.verbose.ok('site: valid pandoc option');
+			}
+		}
+
+		var pathStyle = options.path.toLowerCase();
+
+
+
 		//setting marked options
 		//marked.setOptions(options.marked);
 
@@ -71,6 +100,7 @@ module.exports = function (grunt) {
 		} else {
 			grunt.verbose.ok('site: valid files entry');
 		}
+
 
 		if ( //is the src directory valid?
 			false === _.isArray(this.files[0].src) || //is there a src array?
@@ -146,9 +176,22 @@ module.exports = function (grunt) {
 				//doc.content = marked(doc.content);
 				var command = "pandoc " + options.pandoc;
 				doc.content = exec(command, {input: doc.content}).toString();
+
 				doc.src = src;
-				doc.dest = src.replace('.md', '.' + options.extention);
-				doc.url = doc.dest.replace('index.html','');
+				if( 'path' === pathStyle ){
+					doc.dest = src.replace('.md', '.' + options.extention);
+				} else { // The only other option is directory
+					if ( /index\.md$/.test(src) ){
+						//If the file is index.md, the file will be index.html in the same folder
+						doc.dest = src.replace('.md', '.' + options.extention);
+						console.log("I get here");
+						console.log(doc.dest);
+					} else {
+						//If the file isn't index.md, the resultant file should be index.html in a folder with the name of the file
+						doc.dest = src.replace('.md', '/index.' + options.extention );
+					}
+				}
+				doc.url = doc.dest.replace('index.' + options.extention,'');
 				doc.template = doc.template || defaultTemplate;
 				docs.push(doc);
 				grunt.verbose.ok('site: ' + src + ' document loaded');
