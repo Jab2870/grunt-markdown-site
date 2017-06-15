@@ -184,8 +184,6 @@ module.exports = function (grunt) {
 					if ( /index\.md$/.test(src) ){
 						//If the file is index.md, the file will be index.html in the same folder
 						doc.dest = src.replace('.md', '.' + options.extention);
-						console.log("I get here");
-						console.log(doc.dest);
 					} else {
 						//If the file isn't index.md, the resultant file should be index.html in a folder with the name of the file
 						doc.dest = src.replace('.md', '/index.' + options.extention );
