@@ -68,11 +68,11 @@ The file `/blog/post1.md` should try these templates
 
 The generic templates should start with an underscore as it is unlikely that a md file will start with an underscore. In the future, this might be configurable.
 
-The searcher will work up the folder hierarchy looking for the generic templates.o
+The searcher will work up the folder hierarchy looking for the generic templates.
 
 The file `/blog/catagory1/post1.md` will search for 
 
-`blog/catagory1/post1.html` -> `blog/catagory1/_single.html` -> `blog/_single.html` -> `_single.html` -> `_default.html`
+`blog/catagory1/post1.html` -> `blog/catagory1/_single.html` -> `blog/_single.html` -> `_single.html` -> `blog/catagory1/_default.html` -> `blog/_default.html` -> `_default.html`
 
 #### Hierarchy
 I would like to make the Site object passed to the lodash template have a hierarchy rather than just an array of pages. It would probably take this sort of form
