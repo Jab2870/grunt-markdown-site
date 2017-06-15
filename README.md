@@ -43,15 +43,36 @@ There is also now a path option. This accepts the following options:
  - [x] Use Pandoc rather than marked for conversion
  - [x] Validate pandoc option string
  * [x] Give option for url structure
+ * [ ] Improve default template
  * [ ] Build system for generating menus
  * [ ] Add hierarchy to pages so in global sites object, not all pages are in 1 level (This will probably take the form of nested objects
  - [ ] Give the option to compile to things other than HTML
  - [ ] Look for files other than .md as source files
  - [ ] Run Pandoc command asynchronous. 
 
-### Notes
+### Note
 
 This section is for my reference. I will put notes here for how I plan on doing things
+
+#### Default template
+
+It would be good if the "default" template changed based on different conditions.
+
+For example, I would like any folder's index.html to do try the following templates in order (If one doesn't exist, move to the next). I will demonstrate with an example for the file `/blog/index.md`
+
+`blog/_archive.html` -> `_archive.html` -> `_default.html`
+
+The file `/blog/post1.md` should try these templates
+
+`blog/post1.html` -> `blog/_single.html` -> `_single.html` -> `_default.html`
+
+The generic templates should start with an underscore as it is unlikely that a md file will start with an underscore. In the future, this might be configurable.
+
+The searcher will work up the folder hierarchy looking for the generic templates.o
+
+The file `/blog/catagory1/post1.md` will search for 
+
+`blog/catagory1/post1.html` -> `blog/catagory1/_single.html` -> `blog/_single.html` -> `_single.html` -> `_default.html`
 
 #### Hierarchy
 I would like to make the Site object passed to the lodash template have a hierarchy rather than just an array of pages. It would probably take this sort of form
@@ -97,6 +118,7 @@ I would like to make the Site object passed to the lodash template have a hierar
 ```
 
 This would then aid in generating menus as well
+
 
 # Original grunt-markdown-site README
 
