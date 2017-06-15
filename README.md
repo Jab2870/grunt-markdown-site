@@ -12,25 +12,28 @@ We could also potentially use files other than markdown as source files.
 
 ## How's it going
 
-If you have Pandoc installed on your system, you should now be able to run `grunt build` to build the site now. It will use pandoc to convert the markdown files into HTML5 files.
+If you have Pandoc installed on your system, you should now be able to run `grunt build` to build the site now. It will use pandoc to convert the markdown files into HTML5 files. The options object now accepts a pandok key with a string of pandoc options.
 
-Below is the original readme. Most is still valid except the grunt options no longer use the marked key, there is now a pandoc key that takes the command line string to feed to pandoc.
+There is also now a path option. This accepts the following options:
 
-```js
-site: { //site task
-  example: { //multi task name (EG: example)
-    options: {
-      site: {}, //optional global variables available in all templates (EG: site.title, site.url)
-      extend: {}, //optional extend the scope object available in all templates (EG: By adding a utility library like momentjs)
-      pandoc: '-f markdown -t html5', //The options for pandoc
-      templates: 'src/templates', //required template directory (all partials and templates must be located inside this directory)
-      defaultTemplate: 'default.html' //required default template (used whenever "template" is not defined in a markdown document)
-    },
-    src: 'src/markdown', //required directory that markdown documents will be loaded from
-    dest: 'dest' //required directory that html documents will be output to
-  }
-}
+ * Directory:	The file blog/post1.md will produce the url blog/post1/
+ * Path:		The file blog/post1.md will produce the url blog/post1.html
+
+ There is currently no error checking here. There is the potential for errors with a directory like the following
+
 ```
+ -
+ |- blog.md
+ |- blog/
+ |    |- index.md
+```
+
+ In this example, both files will try to write to the file /blog/index.html
+
+ For this reason, it is recommended that you don't give files the same name as a directory in the same parent directory
+
+
+
 
 
 ------------
@@ -39,6 +42,7 @@ site: { //site task
 
  - [x] Use Pandoc rather than marked for conversion
  - [x] Validate pandoc option string
+ * [x] Give option for url structure
  * [ ] Build system for generating menus
  * [ ] Add hierarchy to pages so in global sites object, not all pages are in 1 level (This will probably take the form of nested objects
  - [ ] Give the option to compile to things other than HTML
