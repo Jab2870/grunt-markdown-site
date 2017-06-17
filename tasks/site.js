@@ -189,12 +189,53 @@ module.exports = function (grunt) {
 						doc.dest = src.replace('.md', '/index.' + options.extention );
 					}
 				}
-				doc.url = doc.dest.replace('index.' + options.extention,'');
+				doc.url = "/" + doc.dest.replace('index.' + options.extention,'');
 				doc.template = doc.template || defaultTemplate;
 				docs.push(doc);
 				grunt.verbose.ok('site: ' + src + ' document loaded');
 			} catch (err) {
 				grunt.fail.warn('site: ' + err + ' in ' + src);
+			}
+		};
+		
+		/** 
+		 * This function takes each doc and assembels a hierarchy
+		 *
+		 * Because the docs array feeding this function is sorted, parent pages are guarenteed to be fed into this function before child pages
+		 */
+		var createHierarchy = function(){
+			docs = _.sortBy(docs,function(d){ return d.url.split("/").length; }); //Sort docs so the higher pages come first
+			if ( "/" !== docs[0].url ){
+				grunt.fail.fatal("You don't have a homepage. Create an index.md in the root of the content folder");
+			}
+			for (var i = 1; i < docs.length; i++){ // intentionally missing the first (homepage)
+				var doc = docs[i];
+				var parts = doc.url.split("/");
+				var parentDoc = docs[0];
+				while( "" === parts[parts.length - 1] ){
+					parts.pop();
+				}
+				while( "" === parts[0] ){
+					parts.shift();
+				}
+				for (var j = 0; j < parts.length; j++){
+					parentDoc.childPages = parentDoc.childPages || {};
+					if(parts.length - 1 === j){
+						// This is the end of the path. This should be a new file
+						if ( undefined !== parentDoc.childPages[parts[j]]){
+							// If it isn't a new file
+							grunt.fail.fatal("There are two files that are trying to be put in " + doc.url);
+						}
+						parentDoc.childPages[parts[j]] = doc;
+						doc.parentPage = parentDoc;
+					} else {
+						if ( undefined === parentDoc.childPages[parts[j]]){
+							parentDoc.childPages[parts[j]] = { type: "archive", childPages: {}};
+						}
+						parentDoc = parentDoc.childPages[parts[j]];
+					}
+				}
+				
 			}
 		};
 
@@ -269,6 +310,8 @@ module.exports = function (grunt) {
 
 		_.each(docPaths, loadDoc);
 		grunt.verbose.ok('site: finished loading documents.');
+		createHierarchy();
+		grunt.verbose.ok('site: finished creating hierarchy.');
 		_.each(templatePaths, loadTemplate);
 		grunt.verbose.ok('site: finished loading templates.');
 		_.each(docs, exportDoc);
