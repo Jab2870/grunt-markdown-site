@@ -12,7 +12,11 @@ We could also potentially use files other than markdown as source files.
 
 ## How's it going
 
-If you have Pandoc installed on your system, you should now be able to run `grunt build` to build the site now. It will use pandoc to convert the markdown files into HTML5 files. The options object now accepts a pandok key with a string of pandoc options.
+### Pandoc
+
+If you have Pandoc installed on your system, you should now be able to run `grunt build` to build the site now. It will use pandoc to convert the markdown files into HTML5 files. The options object now accepts a pandoc key with a string of pandoc options.
+
+### URL Structure
 
 There is also now a path option. This accepts the following options:
 
@@ -28,10 +32,13 @@ There is also now a path option. This accepts the following options:
  |    |- index.md
 ```
 
- In this example, both files will try to write to the file /blog/index.html
+In this example, both files will try to write to the file /blog/index.html
 
- For this reason, it is recommended that you don't give files the same name as a directory in the same parent directory
+For this reason, it is recommended that you don't give files the same name as a directory in the same parent directory
 
+### Hierarchy
+
+The global Docs object now contains `childPages` and `parentPages`.
 
 
 
@@ -45,7 +52,7 @@ There is also now a path option. This accepts the following options:
  * [x] Give option for url structure
  * [ ] Improve default template
  * [ ] Build system for generating menus
- * [ ] Add hierarchy to pages so in global sites object, not all pages are in 1 level (This will probably take the form of nested objects
+ * [x] Add hierarchy to pages so in global sites object, not all pages are in 1 level (This will probably take the form of nested objects
  - [ ] Give the option to compile to things other than HTML
  - [ ] Look for files other than .md as source files
  - [ ] Run Pandoc command asynchronous. 
@@ -74,50 +81,6 @@ The file `/blog/catagory1/post1.md` will search for
 
 `blog/catagory1/post1.html` -> `blog/catagory1/_single.html` -> `blog/_single.html` -> `_single.html` -> `blog/catagory1/_default.html` -> `blog/_default.html` -> `_default.html`
 
-#### Hierarchy
-I would like to make the Site object passed to the lodash template have a hierarchy rather than just an array of pages. It would probably take this sort of form
-
-```js
-[
-	{
-		title: "blar",
-		...: ...
-		childPages: [
-			{
-				title: "blar2",
-				...: ...
-				childPages: [
-					{
-						title: "blar3",
-						...: ...
-					}
-				]
-			}, {
-				title: "blar4",
-				...: ...
-				childPages: [
-					{
-						title: "blar5",
-						...: ...
-					}
-				]
-			}
-
-		]
-	},{
-		title: "blar6",
-		...:...
-	},{
-		title: "blar7",
-		...:...
-	},{
-		title: "blar8",
-		...:...
-	}
-]
-```
-
-This would then aid in generating menus as well
 
 
 # Original grunt-markdown-site README
