@@ -27,7 +27,8 @@ module.exports = function (grunt) {
 			templates: 'templates',
 			defaultTemplate: 'default',
 			extention: 'html',
-			path: "directory" //Options are path or directory.
+			path: "directory", //Options are path or directory.
+			autoArchives: true //weather or not to automatically generate archive pages
 		});
 
 		//is the site option valid?
@@ -230,9 +231,24 @@ module.exports = function (grunt) {
 						doc.parentPage = parentDoc;
 					} else {
 						if ( undefined === parentDoc.childPages[parts[j]]){
-							parentDoc.childPages[parts[j]] = { type: "archive", childPages: {}};
+							//If there is a new page that isn't at the end
+							parentDoc.childPages[parts[j]] = {
+								type: "archive",
+								title: "Archive: " + parts[j],
+								childPages: {},
+								parentPage: parentDoc,
+								url: parentDoc.url + parts[j] + "/",
+								dest: parentDoc.url + parts[j] + "/index.html",
+								template: defaultTemplate,
+								content: "",
+								exclude: !options.autoArchives
+
+							};
+							docs.splice(i,0,parentDoc.childPages[parts[j]]);
+
+						} else {
+							parentDoc = parentDoc.childPages[parts[j]];
 						}
-						parentDoc = parentDoc.childPages[parts[j]];
 					}
 				}
 				

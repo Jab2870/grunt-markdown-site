@@ -41,18 +41,33 @@ For this reason, it is recommended that you don't give files the same name as a 
 The global Docs object now contains `childPages` and `parentPages`.
 
 
+### Automatic Archive Pages
+
+There is now an option called autoArchive which, when true, will automatically create an object in the site structure for a folder with sub pages but without an index.md file in it directly. This defaults to true.
+
+For example, if you have the structure below, there will be an object for the blog directory that can be dealt with in the templating system. The url it is given would be `/blog/` and who's contents would be written to `/blog/index.html`, even though there isn't an index.html file directly under blog.
+
+-index.md
+|-blog
+|  |-article1.md
+|  |-article2.md
+|  |-article3.md
+|
+|-contact.md
+
+This will be far more useful once the default template behaviour is improved.
 
 
-------------
 
 ## ToDo
 
  - [x] Use Pandoc rather than marked for conversion
  - [x] Validate pandoc option string
  * [x] Give option for url structure
+ * [x] Add hierarchy to pages so in global docs object
+ * [x] Add option to automatically generate archive pages
  * [ ] Improve default template
  * [ ] Build system for generating menus
- * [x] Add hierarchy to pages so in global sites object, not all pages are in 1 level (This will probably take the form of nested objects
  - [ ] Give the option to compile to things other than HTML
  - [ ] Look for files other than .md as source files
  - [ ] Run Pandoc command asynchronous. 
