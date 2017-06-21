@@ -47,6 +47,7 @@ There is now an option called autoArchive which, when true, will automatically c
 
 For example, if you have the structure below, there will be an object for the blog directory that can be dealt with in the templating system. The url it is given would be `/blog/` and who's contents would be written to `/blog/index.html`, even though there isn't an index.html file directly under blog.
 
+```
 -index.md
 |-blog
 |  |-article1.md
@@ -54,6 +55,7 @@ For example, if you have the structure below, there will be an object for the bl
 |  |-article3.md
 |
 |-contact.md
+```
 
 This will be far more useful once the default template behaviour is improved.
 
