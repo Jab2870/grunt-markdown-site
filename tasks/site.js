@@ -2,7 +2,7 @@ var _ = require('lodash');
 var path = require('path');
 var exec = require('child_process').execSync;
 //var marked = require('marked');
-var pandoc = require('node-pandoc');
+//var pandoc = require('node-pandoc');
 //var pandoc = require('../modifiedModules/node-pandoc/');
 var frontMatter = require('yaml-front-matter');
 
