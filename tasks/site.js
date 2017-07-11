@@ -22,7 +22,7 @@ module.exports = function (grunt) {
 			//This is an object of site-wide of properties that will be part of the scope in the templates
 			site: {},
 			extend: {},
-			marked: {},
+			//marked: {},
 			pandoc: '-f markdown -t html5',
 			templates: 'templates',
 			defaultTemplate: 'default',
@@ -192,6 +192,7 @@ module.exports = function (grunt) {
 				}
 				doc.url = "/" + doc.dest.replace('index.' + options.extention,'');
 				doc.template = doc.template || defaultTemplate;
+				doc.menuName = doc.menuName || doc.title;
 				docs.push(doc);
 				grunt.verbose.ok('site: ' + src + ' document loaded');
 			} catch (err) {
@@ -206,6 +207,7 @@ module.exports = function (grunt) {
 		 */
 		var createHierarchy = function(){
 			docs = _.sortBy(docs,function(d){ return d.url.split("/").length; }); //Sort docs so the higher pages come first
+			scope.docs = docs;
 			if ( "/" !== docs[0].url ){
 				grunt.fail.fatal("You don't have a homepage. Create an index.md in the root of the content folder");
 			}
@@ -235,20 +237,20 @@ module.exports = function (grunt) {
 							parentDoc.childPages[parts[j]] = {
 								type: "archive",
 								title: "Archive: " + parts[j],
+								menuName: _.capitalize(parts[j]),
 								childPages: {},
 								parentPage: parentDoc,
 								url: parentDoc.url + parts[j] + "/",
 								dest: parentDoc.url + parts[j] + "/index.html",
-								template: defaultTemplate,
+								template: "archive.html",
 								content: "",
 								exclude: !options.autoArchives
 
 							};
 							docs.splice(i,0,parentDoc.childPages[parts[j]]);
-
-						} else {
-							parentDoc = parentDoc.childPages[parts[j]];
+							i++;
 						}
+						parentDoc = parentDoc.childPages[parts[j]];
 					}
 				}
 				
@@ -296,6 +298,7 @@ module.exports = function (grunt) {
 
 		var scope = {
 			_: _,
+			log: console.log,
 			path: path,
 			site: options.site,
 			docs: docs,

@@ -68,15 +68,15 @@ This will be far more useful once the default template behaviour is improved.
  * [x] Give option for url structure
  * [x] Add hierarchy to pages so in global docs object
  * [x] Add option to automatically generate archive pages
- * [ ] Improve default template
  * [ ] Build system for generating menus
+ * [ ] Improve templating system
  - [ ] Give the option to compile to things other than HTML
  - [ ] Look for files other than .md as source files
  - [ ] Run Pandoc command asynchronous. 
 
-### Note
+### Notes
 
-This section is for my reference. I will put notes here for how I plan on doing things
+This section is for my reference. I will put notes here for how I plan on doing things. They might not make sense to people other than me
 
 #### Default template
 
