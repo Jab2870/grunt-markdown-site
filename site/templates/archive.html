@@ -3,7 +3,7 @@
     <h1><%= title %></h1>
     <nav>
         <ul>
-            <% _.each(_.where(docs, {"category": "archive"}), function (_doc) { %>
+            <% _.each(_.filter(docs, {"category": "archive"}), function (_doc) { %>
             <li><a href="/<%= _doc.dest %>"><%= _doc.title %></a></li>
             <% }); %>
         </ul>
